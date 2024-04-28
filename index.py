@@ -1,43 +1,38 @@
 import sys
 
-import numpy as np
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QShortcut, QSlider
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QKeySequence
 from home import Ui_MainWindow
 import pyqtgraph as pg
-# from classes import Image, WorkerThread, HoughTransform
 import cv2
-import json
 from PyQt5.uic import loadUiType
-import numpy as np
+from classes import WorkerThread
 
 ui, _ = loadUiType("home.ui")
 
 
-class Application(QMainWindow, Ui_MainWindow):
+class Application(QMainWindow, ui):
     def __init__(self):
         super(QMainWindow, self).__init__()
         self.setupUi(self)
 
         self.loaded_image = None
+        self.loaded_image_gray = None
 
         self.gray_scale_image = None
         self.contour_thread = None
-        
+
         self.scatter_item = pg.ScatterPlotItem(pen="lime", brush="lime", symbol="x", size=20)
-        
 
         self.initial_region_seeds = []
+        self.region_growing_thread = None
 
         self.wgt_region_input.addItem(self.scatter_item)
-        
 
         self.actionOpen_Image.triggered.connect(self.open_image)
 
         # List containing all plotwidgets for ease of access
-        self.plotwidget_set = [self.wgt_region_input, self.wgt_region_output,]
-
+        self.plotwidget_set = [self.wgt_region_input, self.wgt_region_output, ]
 
         # Create an image item for each plot-widget
         self.image_item_set = [self.item_region_input, self.item_region_output
@@ -46,22 +41,14 @@ class Application(QMainWindow, Ui_MainWindow):
         # Initializes application components
         self.init_application()
 
-
-
         self.btn_region_start.clicked.connect(self.process_image)
-
 
         ############################################ Connections ###################################################
         self.wgt_region_input.scene().sigMouseClicked.connect(self.on_mouse_click)
-        
-
-
 
         #############################################################################################################
         self.undo_shortcut = QApplication.instance().installEventFilter(self)
 
-        
-    
     ################################## Initial Contour Handling Section #########################################
     # Event filter to handle pressing Ctrl + Z to undo initial contour
     def eventFilter(self, source, event):
@@ -69,14 +56,13 @@ class Application(QMainWindow, Ui_MainWindow):
         Just an event filter to capture "Ctrl + Z" combination to undo the last point
         
         """
-        
+
         if event.type() == event.KeyPress and event.key() == Qt.Key_Z and QApplication.keyboardModifiers() == Qt.ControlModifier:
             self.undo_last_point()
             return True
 
         return super().eventFilter(source, event)
 
-    
     def on_mouse_click(self, event):
         """
         Handles clicking the region input plot to add region seeds
@@ -110,36 +96,24 @@ class Application(QMainWindow, Ui_MainWindow):
             # Update the scatter item
             self.scatter_item.setData(x=[p[0] for p in self.initial_region_seeds],
                                       y=[p[1] for p in self.initial_region_seeds])
-            
 
     def clear_points(self):
         self.initial_region_seeds = []
-        
+
         # Clear scatter plot
         self.scatter_item.clear()
 
     ################################## END Initial Contour Handling Section #########################################
 
-    def update_contour_image(self, image):
-        self.display_image(self.item_region_output, image)
-
-    def processing_finished(self):
-        print("Processing Finished")
-
-    def update_area_perimeter(self, area, perimeter):
-        self.lbl_area.setText(f"{round(area, 2)}")
-        self.lbl_perimeter.setText(f"{round(perimeter, 2)}")
+    def update_region_growing_output(self, segmented_image):
+        self.display_image(self.item_region_output, segmented_image)
 
     def process_image(self):
-        pass
-        self.contour_thread = WorkerThread(self.gray_scale_image, self.initial_contour_points)
-        self.contour_thread.signals.update.connect(self.update_contour_image)
-        self.contour_thread.signals.finished.connect(self.processing_finished)
-        self.contour_thread.signals.calc_area_perimeter.connect(self.update_area_perimeter)
-        self.contour_thread.start()
- 
-
-
+        self.region_growing_thread = WorkerThread(self.loaded_image_gray, list(
+            map(lambda tpl: (int(tpl[0]), int(tpl[1])), self.initial_region_seeds)),
+                                                  self.sld_threshold.value())
+        self.region_growing_thread.signals.get_segmented_image.connect(self.update_region_growing_output)
+        self.region_growing_thread.start()
 
     # ############################### Misc Functions ################################
 
@@ -152,9 +126,8 @@ class Application(QMainWindow, Ui_MainWindow):
     def load_img_file(self, image_path):
         # Loads the image using imread, converts it to RGB, then rotates it 90 degrees clockwise
         self.loaded_image = cv2.rotate(cv2.cvtColor(cv2.imread(image_path), cv2.COLOR_BGR2RGB), cv2.ROTATE_90_CLOCKWISE)
-        
+        self.loaded_image_gray = cv2.cvtColor(self.loaded_image, cv2.COLOR_RGB2GRAY)
         self.display_image(self.item_region_input, self.loaded_image)
-        
 
     def open_image(self):
         file_dialog = QFileDialog(self)
@@ -184,8 +157,7 @@ class Application(QMainWindow, Ui_MainWindow):
         self.setup_plotwidgets()
 
 
-
 app = QApplication(sys.argv)
-win = Application()  
+win = Application()
 win.show()
 app.exec()

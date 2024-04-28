@@ -267,7 +267,7 @@ QPlotWidget{
 }</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout" rowstretch="1" columnstretch="0">
+   <layout class="QGridLayout" name="gridLayout" rowstretch="1,0" columnstretch="0">
     <item row="0" column="0">
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
@@ -331,6 +331,22 @@ QPlotWidget{
       </widget>
      </widget>
     </item>
+    <item row="1" column="0">
+     <widget class="QSlider" name="sld_threshold">
+      <property name="minimum">
+       <number>1</number>
+      </property>
+      <property name="maximum">
+       <number>50</number>
+      </property>
+      <property name="value">
+       <number>6</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -370,7 +386,4 @@ QPlotWidget{
  </customwidgets>
  <resources/>
  <connections/>
- <buttongroups>
-  <buttongroup name="buttonGroup"/>
- </buttongroups>
 </ui>
