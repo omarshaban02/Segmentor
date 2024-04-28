@@ -11,7 +11,7 @@ from classes import WorkerThread
 ui, _ = loadUiType("home.ui")
 
 
-class Application(QMainWindow, Ui_MainWindow):
+class Application(QMainWindow, ui):
     def __init__(self):
         super(QMainWindow, self).__init__()
         self.setupUi(self)
@@ -32,7 +32,7 @@ class Application(QMainWindow, Ui_MainWindow):
         self.actionOpen_Image.triggered.connect(self.open_image)
 
         # List containing all plotwidgets for ease of access
-        self.plotwidget_set = [self.wgt_seg_input, self.wgt_seg_output, self.wgt_thresh_input, self.wgt_thresh_output]
+        self.plotwidget_set = [self.wgt_seg_input, self.wgt_seg_output, ]
 
         # Create an image item for each plot-widget
         self.image_item_set = [self.item_seg_input, self.item_seg_output, self.item_thresh_input
@@ -41,11 +41,10 @@ class Application(QMainWindow, Ui_MainWindow):
         # Initializes application components
         self.init_application()
 
-        self.btn_seg_apply.clicked.connect(self.process_image)
+        self.btn_region_start.clicked.connect(self.process_image)
 
         ############################################ Connections ###################################################
-        self.wgt_seg_input.scene().sigMouseClicked.connect(self.sld_region_threshold_click)
-        self.comboBox_seg.currentIndexChanged.connect(self.clear_points)
+        self.wgt_seg_input.scene().sigMouseClicked.connect(self.on_mouse_click)
 
         #############################################################################################################
         self.undo_shortcut = QApplication.instance().installEventFilter(self)
@@ -64,13 +63,11 @@ class Application(QMainWindow, Ui_MainWindow):
 
         return super().eventFilter(source, event)
 
-    def sld_region_threshold_click(self, event):
+    def on_mouse_click(self, event):
         """
         Handles clicking the region input plot to add region seeds
         """
-        # Only allow Seed creation behaviour when selecting Region growing
-        if self.comboBox_seg.currentIndex() != 3: return
-        
+
         # Allows for checking if a keyboard modifier is pressed, ex: Ctrl
         modifiers = QApplication.keyboardModifiers()
 
@@ -112,32 +109,11 @@ class Application(QMainWindow, Ui_MainWindow):
         self.display_image(self.item_seg_output, segmented_image)
 
     def process_image(self):
-        current_seg_mode = self.comboBox_seg.currentIndex()
-        
-        match current_seg_mode:
-            
-            case 0: # Agglomerative
-                
-                # INSERT AGGLOMERATIVE CODE HERE
-                pass
-            
-            case 1: # Mean Shift
-                
-                # INSERT AGGLOMERATIVE CODE HERE
-                pass
-            
-            case 2: # K-Means
-                
-                # INSERT AGGLOMERATIVE CODE HERE
-                pass
-            
-            case 3: # Region Growing
-                
-                self.region_growing_thread = WorkerThread(self.loaded_image_gray, list(
-                    map(lambda tpl: (int(tpl[0]), int(tpl[1])), self.initial_region_seeds)),
-                                                          self.sld_region_threshold.value())
-                self.region_growing_thread.signals.get_segmented_image.connect(self.update_region_growing_output)
-                self.region_growing_thread.start()
+        self.region_growing_thread = WorkerThread(self.loaded_image_gray, list(
+            map(lambda tpl: (int(tpl[0]), int(tpl[1])), self.initial_region_seeds)),
+                                                  self.sld_threshold.value())
+        self.region_growing_thread.signals.get_segmented_image.connect(self.update_region_growing_output)
+        self.region_growing_thread.start()
 
     # ############################### Misc Functions ################################
 
@@ -151,10 +127,7 @@ class Application(QMainWindow, Ui_MainWindow):
         # Loads the image using imread, converts it to RGB, then rotates it 90 degrees clockwise
         self.loaded_image = cv2.rotate(cv2.cvtColor(cv2.imread(image_path), cv2.COLOR_BGR2RGB), cv2.ROTATE_90_CLOCKWISE)
         self.loaded_image_gray = cv2.cvtColor(self.loaded_image, cv2.COLOR_RGB2GRAY)
-        
-        # Displays the image on both tabs in the input widget
-        for item in (self.item_seg_input, self.item_thresh_input):
-            self.display_image(item, self.loaded_image)
+        self.display_image(self.item_seg_input, self.loaded_image)
 
     def open_image(self):
         file_dialog = QFileDialog(self)

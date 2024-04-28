@@ -11,7 +11,7 @@ from classes import WorkerThread
 ui, _ = loadUiType("home.ui")
 
 
-class Application(QMainWindow, Ui_MainWindow):
+class Application(QMainWindow, ui):
     def __init__(self):
         super(QMainWindow, self).__init__()
         self.setupUi(self)
@@ -44,8 +44,7 @@ class Application(QMainWindow, Ui_MainWindow):
         self.btn_seg_apply.clicked.connect(self.process_image)
 
         ############################################ Connections ###################################################
-        self.wgt_seg_input.scene().sigMouseClicked.connect(self.sld_region_threshold_click)
-        self.comboBox_seg.currentIndexChanged.connect(self.clear_points)
+        self.wgt_seg_input.scene().sigMouseClicked.connect(self.on_mouse_click)
 
         #############################################################################################################
         self.undo_shortcut = QApplication.instance().installEventFilter(self)
@@ -64,13 +63,11 @@ class Application(QMainWindow, Ui_MainWindow):
 
         return super().eventFilter(source, event)
 
-    def sld_region_threshold_click(self, event):
+    def on_mouse_click(self, event):
         """
         Handles clicking the region input plot to add region seeds
         """
-        # Only allow Seed creation behaviour when selecting Region growing
-        if self.comboBox_seg.currentIndex() != 3: return
-        
+
         # Allows for checking if a keyboard modifier is pressed, ex: Ctrl
         modifiers = QApplication.keyboardModifiers()
 
@@ -112,32 +109,11 @@ class Application(QMainWindow, Ui_MainWindow):
         self.display_image(self.item_seg_output, segmented_image)
 
     def process_image(self):
-        current_seg_mode = self.comboBox_seg.currentIndex()
-        
-        match current_seg_mode:
-            
-            case 0: # Agglomerative
-                
-                # INSERT AGGLOMERATIVE CODE HERE
-                pass
-            
-            case 1: # Mean Shift
-                
-                # INSERT AGGLOMERATIVE CODE HERE
-                pass
-            
-            case 2: # K-Means
-                
-                # INSERT AGGLOMERATIVE CODE HERE
-                pass
-            
-            case 3: # Region Growing
-                
-                self.region_growing_thread = WorkerThread(self.loaded_image_gray, list(
-                    map(lambda tpl: (int(tpl[0]), int(tpl[1])), self.initial_region_seeds)),
-                                                          self.sld_region_threshold.value())
-                self.region_growing_thread.signals.get_segmented_image.connect(self.update_region_growing_output)
-                self.region_growing_thread.start()
+        self.region_growing_thread = WorkerThread(self.loaded_image_gray, list(
+            map(lambda tpl: (int(tpl[0]), int(tpl[1])), self.initial_region_seeds)),
+                                                  self.sld_seg_threshold.value())
+        self.region_growing_thread.signals.get_segmented_image.connect(self.update_region_growing_output)
+        self.region_growing_thread.start()
 
     # ############################### Misc Functions ################################
 
