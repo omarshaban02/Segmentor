@@ -6,7 +6,7 @@ from home import Ui_MainWindow
 import pyqtgraph as pg
 import cv2
 from PyQt5.uic import loadUiType
-from classes import WorkerThread
+from classes import RegionGrowingThread, MeanShiftThread
 
 ui, _ = loadUiType("home.ui")
 
@@ -16,16 +16,20 @@ class Application(QMainWindow, ui):
         super(QMainWindow, self).__init__()
         self.setupUi(self)
 
+        self.scatter_item = pg.ScatterPlotItem(pen="lime", brush="lime", symbol="x", size=20)
+
+        # Loaded image and its grayscale version
         self.loaded_image = None
         self.loaded_image_gray = None
 
-        self.gray_scale_image = None
-        self.contour_thread = None
-
-        self.scatter_item = pg.ScatterPlotItem(pen="lime", brush="lime", symbol="x", size=20)
-
+        # List to store the initial region seeds
         self.initial_region_seeds = []
+
+        # Thread for Region Growing
         self.region_growing_thread = None
+
+        # Thread for Mean Shift
+        self.mean_shift_thread = None
 
         self.wgt_seg_input.addItem(self.scatter_item)
 
@@ -36,7 +40,7 @@ class Application(QMainWindow, ui):
 
         # Create an image item for each plot-widget
         self.image_item_set = [self.item_seg_input, self.item_seg_output, self.item_thresh_input
-                               ,self.item_thresh_output] = [pg.ImageItem() for _ in range(4)]
+            , self.item_thresh_output] = [pg.ImageItem() for _ in range(4)]
 
         # Initializes application components
         self.init_application()
@@ -70,7 +74,7 @@ class Application(QMainWindow, ui):
         """
         # Only allow Seed creation behaviour when selecting Region growing
         if self.comboBox_seg.currentIndex() != 3: return
-        
+
         # Allows for checking if a keyboard modifier is pressed, ex: Ctrl
         modifiers = QApplication.keyboardModifiers()
 
@@ -108,62 +112,62 @@ class Application(QMainWindow, ui):
 
     ################################## END Initial Contour Handling Section #########################################
 
-    def update_region_growing_output(self, segmented_image):
+    def update_output(self, segmented_image):
         self.display_image(self.item_seg_output, segmented_image)
 
     def process_image(self):
         current_tab_index = self.tabWidget.currentIndex()
         match current_tab_index:
-            case 0: # Segmentation tab
+            case 0:  # Segmentation tab
                 current_seg_mode = self.comboBox_seg.currentIndex()
-                
+
                 match current_seg_mode:
-                    
-                    case 0: # Agglomerative
-                        
+
+                    case 0:  # Agglomerative
+
                         # INSERT AGGLOMERATIVE CODE HERE
                         pass
-                    
-                    case 1: # Mean Shift
-                        
+
+                    case 1:  # Mean Shift
+
+                        self.mean_shift_thread = MeanShiftThread(self.loaded_image)
+                        self.mean_shift_thread.signals.get_segmented_image.connect(self.update_output)
+                        self.mean_shift_thread.start()
+
+                    case 2:  # K-Means
+
                         # INSERT AGGLOMERATIVE CODE HERE
                         pass
-                    
-                    case 2: # K-Means
-                        
-                        # INSERT AGGLOMERATIVE CODE HERE
-                        pass
-                    
-                    case 3: # Region Growing
-                        
-                        self.region_growing_thread = WorkerThread(self.loaded_image_gray, list(
+
+                    case 3:  # Region Growing
+
+                        self.region_growing_thread = RegionGrowingThread(self.loaded_image_gray, list(
                             map(lambda tpl: (int(tpl[0]), int(tpl[1])), self.initial_region_seeds)),
-                                                                self.sld_region_threshold.value())
-                        self.region_growing_thread.signals.get_segmented_image.connect(self.update_region_growing_output)
+                                                                         self.sld_region_threshold.value())
+                        self.region_growing_thread.signals.get_segmented_image.connect(self.update_output)
                         self.region_growing_thread.start()
-                        
-                        
-            case 1: # Thresholding Tab
+
+            case 1:  # Thresholding Tab
                 current_thresh_mode = self.comboBox_thresh.currentIndex()
-                
+
                 match current_thresh_mode:
-                    case 0: # Global Thresholding
+                    case 0:  # Global Thresholding
                         # INSERT THRESHOLDING CODE HERE
                         pass
-                    
-                    case 1: # Local Thresholding
+
+                    case 1:  # Local Thresholding
                         # INSERT THRESHOLDING CODE HERE
                         pass
-                    
-                    case 2: # Optimal Thresholding
+
+                    case 2:  # Optimal Thresholding
                         # INSERT THRESHOLDING CODE HERE
                         pass
-                    
-                    case 3: # Otsu Thresholding
+
+                    case 3:  # Otsu Thresholding
                         # INSERT THRESHOLDING CODE HERE
                         pass
-                    
-                    case 4: # Multilevel Thresholding
+
+                    case 4:  # Multilevel Thresholding
                         # INSERT THRESHOLDING CODE HERE
                         pass
 
@@ -179,7 +183,7 @@ class Application(QMainWindow, ui):
         # Loads the image using imread, converts it to RGB, then rotates it 90 degrees clockwise
         self.loaded_image = cv2.rotate(cv2.cvtColor(cv2.imread(image_path), cv2.COLOR_BGR2RGB), cv2.ROTATE_90_CLOCKWISE)
         self.loaded_image_gray = cv2.cvtColor(self.loaded_image, cv2.COLOR_RGB2GRAY)
-        
+
         # Displays the image on both tabs in the input widget
         for item in (self.item_seg_input, self.item_thresh_input):
             self.display_image(item, self.loaded_image)
