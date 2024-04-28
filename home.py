@@ -484,15 +484,15 @@ class Ui_MainWindow(object):
         self.label_14 = QtWidgets.QLabel(self.tab_thresh)
         self.label_14.setObjectName("label_14")
         self.horizontalLayout_16.addWidget(self.label_14)
-        self.comboBox_seg_2 = QtWidgets.QComboBox(self.tab_thresh)
-        self.comboBox_seg_2.setStyleSheet("background: #132f5c;")
-        self.comboBox_seg_2.setObjectName("comboBox_seg_2")
-        self.comboBox_seg_2.addItem("")
-        self.comboBox_seg_2.addItem("")
-        self.comboBox_seg_2.addItem("")
-        self.comboBox_seg_2.addItem("")
-        self.comboBox_seg_2.addItem("")
-        self.horizontalLayout_16.addWidget(self.comboBox_seg_2)
+        self.comboBox_thresh = QtWidgets.QComboBox(self.tab_thresh)
+        self.comboBox_thresh.setStyleSheet("background: #132f5c;")
+        self.comboBox_thresh.setObjectName("comboBox_thresh")
+        self.comboBox_thresh.addItem("")
+        self.comboBox_thresh.addItem("")
+        self.comboBox_thresh.addItem("")
+        self.comboBox_thresh.addItem("")
+        self.comboBox_thresh.addItem("")
+        self.horizontalLayout_16.addWidget(self.comboBox_thresh)
         self.horizontalLayout_15.addLayout(self.horizontalLayout_16)
         spacerItem = QtWidgets.QSpacerItem(60, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_15.addItem(spacerItem)
@@ -656,7 +656,7 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuFile.menuAction())
 
         self.retranslateUi(MainWindow)
-        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(1)
         self.stackedWidget_seg.setCurrentIndex(0)
         self.stackedWidget_seg_2.setCurrentIndex(0)
         self.sld_seg_ksize.valueChanged['int'].connect(self.label_12.setNum) # type: ignore
@@ -664,7 +664,7 @@ class Ui_MainWindow(object):
         self.comboBox_seg.currentIndexChanged['int'].connect(self.stackedWidget_seg.setCurrentIndex) # type: ignore
         self.sld_thresh_global_max.valueChanged['int'].connect(self.label_24.setNum) # type: ignore
         self.sld_thresh_global_min.valueChanged['int'].connect(self.label_25.setNum) # type: ignore
-        self.comboBox_seg_2.currentIndexChanged['int'].connect(self.stackedWidget_seg_2.setCurrentIndex) # type: ignore
+        self.comboBox_thresh.currentIndexChanged['int'].connect(self.stackedWidget_seg_2.setCurrentIndex) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -692,11 +692,11 @@ class Ui_MainWindow(object):
         self.btn_seg_apply.setText(_translate("MainWindow", "Apply"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_seg), _translate("MainWindow", "Segmentation"))
         self.label_14.setText(_translate("MainWindow", "Thresholding Method"))
-        self.comboBox_seg_2.setItemText(0, _translate("MainWindow", "Global"))
-        self.comboBox_seg_2.setItemText(1, _translate("MainWindow", "Local"))
-        self.comboBox_seg_2.setItemText(2, _translate("MainWindow", "Optimal"))
-        self.comboBox_seg_2.setItemText(3, _translate("MainWindow", "Otsu"))
-        self.comboBox_seg_2.setItemText(4, _translate("MainWindow", "Multilevel"))
+        self.comboBox_thresh.setItemText(0, _translate("MainWindow", "Global"))
+        self.comboBox_thresh.setItemText(1, _translate("MainWindow", "Local"))
+        self.comboBox_thresh.setItemText(2, _translate("MainWindow", "Optimal"))
+        self.comboBox_thresh.setItemText(3, _translate("MainWindow", "Otsu"))
+        self.comboBox_thresh.setItemText(4, _translate("MainWindow", "Multilevel"))
         self.groupBox_5.setTitle(_translate("MainWindow", "Global Threshold Settings"))
         self.label_3.setText(_translate("MainWindow", "Max Threshold"))
         self.label_24.setText(_translate("MainWindow", "20"))

@@ -283,7 +283,7 @@ QPlotWidget{
     <item row="0" column="0">
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tab_seg">
        <attribute name="title">
@@ -740,7 +740,7 @@ QPlotWidget{
              </widget>
             </item>
             <item>
-             <widget class="QComboBox" name="comboBox_seg_2">
+             <widget class="QComboBox" name="comboBox_thresh">
               <property name="styleSheet">
                <string notr="true">background: #132f5c;</string>
               </property>
@@ -1264,7 +1264,7 @@ QPlotWidget{
    </hints>
   </connection>
   <connection>
-   <sender>comboBox_seg_2</sender>
+   <sender>comboBox_thresh</sender>
    <signal>currentIndexChanged(int)</signal>
    <receiver>stackedWidget_seg_2</receiver>
    <slot>setCurrentIndex(int)</slot>
