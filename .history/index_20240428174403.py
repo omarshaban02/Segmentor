@@ -11,7 +11,7 @@ from classes import WorkerThread
 ui, _ = loadUiType("home.ui")
 
 
-class Application(QMainWindow, ui):
+class Application(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super(QMainWindow, self).__init__()
         self.setupUi(self)

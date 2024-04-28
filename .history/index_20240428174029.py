@@ -11,7 +11,7 @@ from classes import WorkerThread
 ui, _ = loadUiType("home.ui")
 
 
-class Application(QMainWindow, ui):
+class Application(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super(QMainWindow, self).__init__()
         self.setupUi(self)
@@ -112,60 +112,33 @@ class Application(QMainWindow, ui):
         self.display_image(self.item_seg_output, segmented_image)
 
     def process_image(self):
-        current_tab_index = self.tabWidget.currentIndex()
-        match current_tab_index:
-            case 0: # Segmentation tab
-                current_seg_mode = self.comboBox_seg.currentIndex()
+        current_tab_index = self.tabWidget
+        current_seg_mode = self.comboBox_seg.currentIndex()
+        
+        match current_seg_mode:
+            
+            case 0: # Agglomerative
                 
-                match current_seg_mode:
-                    
-                    case 0: # Agglomerative
-                        
-                        # INSERT AGGLOMERATIVE CODE HERE
-                        pass
-                    
-                    case 1: # Mean Shift
-                        
-                        # INSERT AGGLOMERATIVE CODE HERE
-                        pass
-                    
-                    case 2: # K-Means
-                        
-                        # INSERT AGGLOMERATIVE CODE HERE
-                        pass
-                    
-                    case 3: # Region Growing
-                        
-                        self.region_growing_thread = WorkerThread(self.loaded_image_gray, list(
-                            map(lambda tpl: (int(tpl[0]), int(tpl[1])), self.initial_region_seeds)),
-                                                                self.sld_region_threshold.value())
-                        self.region_growing_thread.signals.get_segmented_image.connect(self.update_region_growing_output)
-                        self.region_growing_thread.start()
-                        
-                        
-            case 1: # Thresholding Tab
-                current_thresh_mode = self.comboBox_thresh.currentIndex()
+                # INSERT AGGLOMERATIVE CODE HERE
+                pass
+            
+            case 1: # Mean Shift
                 
-                match current_thresh_mode:
-                    case 0: # Global Thresholding
-                        # INSERT THRESHOLDING CODE HERE
-                        pass
-                    
-                    case 1: # Local Thresholding
-                        # INSERT THRESHOLDING CODE HERE
-                        pass
-                    
-                    case 2: # Optimal Thresholding
-                        # INSERT THRESHOLDING CODE HERE
-                        pass
-                    
-                    case 3: # Otsu Thresholding
-                        # INSERT THRESHOLDING CODE HERE
-                        pass
-                    
-                    case 4: # Multilevel Thresholding
-                        # INSERT THRESHOLDING CODE HERE
-                        pass
+                # INSERT AGGLOMERATIVE CODE HERE
+                pass
+            
+            case 2: # K-Means
+                
+                # INSERT AGGLOMERATIVE CODE HERE
+                pass
+            
+            case 3: # Region Growing
+                
+                self.region_growing_thread = WorkerThread(self.loaded_image_gray, list(
+                    map(lambda tpl: (int(tpl[0]), int(tpl[1])), self.initial_region_seeds)),
+                                                          self.sld_region_threshold.value())
+                self.region_growing_thread.signals.get_segmented_image.connect(self.update_region_growing_output)
+                self.region_growing_thread.start()
 
     # ############################### Misc Functions ################################
 
