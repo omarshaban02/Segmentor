@@ -795,7 +795,7 @@ QPlotWidget{
              </sizepolicy>
             </property>
             <property name="currentIndex">
-             <number>0</number>
+             <number>1</number>
             </property>
             <widget class="QWidget" name="page_agglo_2">
              <layout class="QGridLayout" name="gridLayout_7">
@@ -829,14 +829,14 @@ QPlotWidget{
                     <string notr="true">font-size:15px;</string>
                    </property>
                    <property name="text">
-                    <string>Max Threshold</string>
+                    <string>Threshold</string>
                    </property>
                   </widget>
                  </item>
                  <item row="0" column="1">
                   <layout class="QHBoxLayout" name="horizontalLayout_5">
                    <item>
-                    <widget class="QSlider" name="sld_thresh_global_max">
+                    <widget class="QSlider" name="sld_thresh_global">
                      <property name="minimum">
                       <number>0</number>
                      </property>
@@ -870,58 +870,6 @@ QPlotWidget{
                      </property>
                      <property name="text">
                       <string>20</string>
-                     </property>
-                    </widget>
-                   </item>
-                  </layout>
-                 </item>
-                 <item row="1" column="0">
-                  <widget class="QLabel" name="label_4">
-                   <property name="styleSheet">
-                    <string notr="true">font-size:15px;</string>
-                   </property>
-                   <property name="text">
-                    <string>Min Threshold</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="1" column="1">
-                  <layout class="QHBoxLayout" name="horizontalLayout_3">
-                   <item>
-                    <widget class="QSlider" name="sld_thresh_global_min">
-                     <property name="minimum">
-                      <number>0</number>
-                     </property>
-                     <property name="maximum">
-                      <number>100</number>
-                     </property>
-                     <property name="value">
-                      <number>30</number>
-                     </property>
-                     <property name="orientation">
-                      <enum>Qt::Horizontal</enum>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QLabel" name="label_25">
-                     <property name="minimumSize">
-                      <size>
-                       <width>25</width>
-                       <height>0</height>
-                      </size>
-                     </property>
-                     <property name="maximumSize">
-                      <size>
-                       <width>16777215</width>
-                       <height>16777215</height>
-                      </size>
-                     </property>
-                     <property name="styleSheet">
-                      <string notr="true">font-size:15px;</string>
-                     </property>
-                     <property name="text">
-                      <string>30</string>
                      </property>
                     </widget>
                    </item>
@@ -969,13 +917,13 @@ QPlotWidget{
                       <number>3</number>
                      </property>
                      <property name="maximum">
-                      <number>7</number>
+                      <number>20</number>
                      </property>
                      <property name="singleStep">
-                      <number>2</number>
+                      <number>1</number>
                      </property>
                      <property name="pageStep">
-                      <number>2</number>
+                      <number>3</number>
                      </property>
                      <property name="value">
                       <number>3</number>
@@ -1190,12 +1138,12 @@ QPlotWidget{
    <slot>setNum(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>702</x>
-     <y>117</y>
+     <x>555</x>
+     <y>104</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1030</x>
-     <y>121</y>
+     <x>611</x>
+     <y>104</y>
     </hint>
    </hints>
   </connection>
@@ -1206,12 +1154,12 @@ QPlotWidget{
    <slot>setNum(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>692</x>
-     <y>155</y>
+     <x>555</x>
+     <y>108</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1047</x>
-     <y>150</y>
+     <x>611</x>
+     <y>108</y>
     </hint>
    </hints>
   </connection>
@@ -1232,34 +1180,18 @@ QPlotWidget{
    </hints>
   </connection>
   <connection>
-   <sender>sld_thresh_global_max</sender>
+   <sender>sld_thresh_global</sender>
    <signal>valueChanged(int)</signal>
    <receiver>label_24</receiver>
    <slot>setNum(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>877</x>
-     <y>345</y>
+     <x>943</x>
+     <y>128</y>
     </hint>
     <hint type="destinationlabel">
-     <x>902</x>
-     <y>345</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>sld_thresh_global_min</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>label_25</receiver>
-   <slot>setNum(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>879</x>
-     <y>380</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>900</x>
-     <y>379</y>
+     <x>974</x>
+     <y>128</y>
     </hint>
    </hints>
   </connection>
@@ -1270,12 +1202,28 @@ QPlotWidget{
    <slot>setCurrentIndex(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>313</x>
-     <y>139</y>
+     <x>346</x>
+     <y>122</y>
     </hint>
     <hint type="destinationlabel">
-     <x>578</x>
-     <y>140</y>
+     <x>984</x>
+     <y>138</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>sld_thresh_local_block_size</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>label_26</receiver>
+   <slot>setNum(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>863</x>
+     <y>116</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>952</x>
+     <y>119</y>
     </hint>
    </hints>
   </connection>

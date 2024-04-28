@@ -213,3 +213,126 @@ def mean_shift(image, bandwidth=21, max_iterations=50, convergence_threshold=1e-
     return colored_segmentation
 
 # ######################################## Mean Shift Algorithm end ######################################
+########################################## Thresholding ##################################################
+class Thresholding:
+    def __init__(self, input_image):
+        self.img = input_image.copy()
+
+    
+
+    def global_threshold(self, threshold_value=127, max_value=255):
+        """
+        Apply global thresholding to a grayscale image.
+
+        Parameters:
+            image (numpy.ndarray): Input grayscale image.
+            threshold_value (int): Threshold value.
+            max_value (int): Maximum value for pixels above the threshold.
+
+        Returns:
+            numpy.ndarray: Thresholded image.
+        """
+        image = self.img
+        thresholded = np.where(image > threshold_value, max_value, 0).astype(np.uint8)
+        return thresholded
+
+    def local_threshold(self, blockSize=11, C=2, max_value=255):
+        """
+        Apply local thresholding to a grayscale image.
+
+        Parameters:
+            image (numpy.ndarray): Input grayscale image.
+            blockSize (int): Size of the local neighborhood for computing the threshold value.
+            C (int): Constant subtracted from the mean or weighted mean.
+            max_value (int): Maximum value for pixels above the threshold.
+
+        Returns:
+            numpy.ndarray: Thresholded image.
+        """
+        image = self.img
+        thresholded = np.zeros_like(image, dtype=np.uint8)
+        for i in range(image.shape[0]):
+            for j in range(image.shape[1]):
+                # Define the region of interest
+                roi = image[max(0, i - blockSize // 2): min(image.shape[0], i + blockSize // 2),
+                            max(0, j - blockSize // 2): min(image.shape[1], j + blockSize // 2)]
+                # Compute the threshold value for the region
+                threshold_value = np.mean(roi) - C
+                # Apply thresholding
+                thresholded[i, j] = max_value if image[i, j] > threshold_value else 0
+        return thresholded
+        
+
+    def _compute_otsu_criteria(self, im, th):
+        # create the thresholded image
+        thresholded_im = np.zeros(im.shape)
+        thresholded_im[im >= th] = 1
+
+        # compute weights
+        nb_pixels = im.size
+        nb_pixels1 = np.count_nonzero(thresholded_im)
+        weight1 = nb_pixels1 / nb_pixels
+        weight0 = 1 - weight1
+
+        # if one of the classes is empty, eg all pixels are below or above the threshold, that threshold will not be considered
+        # in the search for the best threshold
+        if weight1 == 0 or weight0 == 0:
+            return np.inf
+
+        # find all pixels belonging to each class
+        val_pixels1 = im[thresholded_im == 1]
+        val_pixels0 = im[thresholded_im == 0]
+
+        # compute variance of these classes
+        var1 = np.var(val_pixels1) if len(val_pixels1) > 0 else 0
+        var0 = np.var(val_pixels0) if len(val_pixels0) > 0 else 0
+
+        return weight0 * var0 + weight1 * var1
+
+    def otsuThresholding(self):
+        img = self.img
+        threshold_range = range(np.max(img)+1)
+        criterias = np.array([self._compute_otsu_criteria(img, th) for th in threshold_range])
+
+        # best threshold is the one minimizing the Otsu criteria
+        best_threshold = threshold_range[np.argmin(criterias)]
+
+        binary = img
+        binary[binary < best_threshold] = 0
+        binary[binary >= best_threshold] = 255
+
+        return binary
+    
+    def optimal_thresholding(self):
+        # Convert image to grayscale
+        gray_image = self.img
+        
+        # Initialize threshold with a random value (e.g., midpoint of intensity range)
+        min_intensity = np.min(gray_image)
+        max_intensity = np.max(gray_image)
+        threshold = (min_intensity + max_intensity) // 2
+        
+        # Iterate until convergence (threshold value stabilizes)
+        while True:
+            # Classify pixels into foreground (class 1) and background (class 2) based on current threshold
+            foreground_pixels = gray_image[gray_image > threshold]
+            background_pixels = gray_image[gray_image <= threshold]
+            
+            # Calculate mean intensity values of the two classes
+            mean_foreground = np.mean(foreground_pixels)
+            mean_background = np.mean(background_pixels)
+            
+            # Calculate new threshold as the average of mean intensities
+            new_threshold = (mean_foreground + mean_background) / 2
+            
+            # Check convergence: if new threshold is close to the old threshold, break the loop
+            if np.abs(new_threshold - threshold) < 1e-3:
+                break
+            
+            # Update the threshold
+            threshold = new_threshold
+        
+        # Apply the final threshold to the grayscale image
+        thresholded_image = (gray_image > threshold).astype(np.uint8) * 255
+        
+        return thresholded_image

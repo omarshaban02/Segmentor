@@ -6,7 +6,7 @@ from home import Ui_MainWindow
 import pyqtgraph as pg
 import cv2
 from PyQt5.uic import loadUiType
-from classes import RegionGrowingThread, MeanShiftThread
+from classes import RegionGrowingThread, MeanShiftThread, Thresholding
 
 ui, _ = loadUiType("home.ui")
 
@@ -46,7 +46,8 @@ class Application(QMainWindow, ui):
         self.init_application()
 
         self.btn_seg_apply.clicked.connect(self.process_image)
-
+        self.btn_thresh_apply.clicked.connect(self.process_image)
+ 
         ############################################ Connections ###################################################
         self.wgt_seg_input.scene().sigMouseClicked.connect(self.sld_region_threshold_click)
         self.comboBox_seg.currentIndexChanged.connect(self.clear_points)
@@ -149,22 +150,44 @@ class Application(QMainWindow, ui):
 
             case 1:  # Thresholding Tab
                 current_thresh_mode = self.comboBox_thresh.currentIndex()
+                self.thresh_obj = Thresholding(self.loaded_image_gray)
 
                 match current_thresh_mode:
                     case 0:  # Global Thresholding
-                        # INSERT THRESHOLDING CODE HERE
+        
+                        """
+                        Callback function for global thresholding.
+                        """
+                        result = self.thresh_obj.global_threshold(self.sld_thresh_global.value())
+                        self.display_image(self.item_thresh_output, result)
                         pass
 
                     case 1:  # Local Thresholding
-                        # INSERT THRESHOLDING CODE HERE
+                        
+                        """
+                        Callback function for local thresholding.
+                        """
+                        result = self.thresh_obj.local_threshold((self.sld_thresh_local_block_size.value() ))
+                        self.display_image(self.item_thresh_output, result)
                         pass
 
                     case 2:  # Optimal Thresholding
-                        # INSERT THRESHOLDING CODE HERE
+                        """
+                        Callback function for local thresholding.
+                        """
+                        result = self.thresh_obj.optimal_thresholding()
+                        self.display_image(self.item_thresh_output, result)
                         pass
+                        
 
                     case 3:  # Otsu Thresholding
-                        # INSERT THRESHOLDING CODE HERE
+                        """
+                        Callback function for local thresholding.
+                        """
+                        result = self.thresh_obj.otsuThresholding()
+                        self.display_image(self.item_thresh_output, result)
+                        pass
+                        
                         pass
 
                     case 4:  # Multilevel Thresholding
