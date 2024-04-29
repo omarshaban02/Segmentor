@@ -1,12 +1,12 @@
 import sys
-
+import numpy as np
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QShortcut, QSlider
 from PyQt5.QtCore import Qt
 from home import Ui_MainWindow
 import pyqtgraph as pg
 import cv2
 from PyQt5.uic import loadUiType
-from classes import RegionGrowingThread, MeanShiftThread, Thresholding, KMeansClustering
+from classes import RegionGrowingThread, MeanShiftThread, Thresholding, KMeansClustering, AgglomerativeClustering
 
 ui, _ = loadUiType("home.ui")
 
@@ -57,6 +57,8 @@ class Application(QMainWindow, ui):
 
         #############################################################################################################
         self.undo_shortcut = QApplication.instance().installEventFilter(self)
+
+
 
     ################################## Initial Contour Handling Section #########################################
     # Event filter to handle pressing Ctrl + Z to undo initial contour
@@ -128,9 +130,16 @@ class Application(QMainWindow, ui):
                 match current_seg_mode:
 
                     case 0:  # Agglomerative
+                        img = self.loaded_image.copy()
+                        pixels = img.reshape((-1, 3))
+                        print(pixels.shape)
 
-                        # INSERT AGGLOMERATIVE CODE HERE
-                        pass
+                        n_clusters = self.spinBox_clusters_num.value()
+                        agglo = AgglomerativeClustering(k=n_clusters, initial_k=self.spinBox_clusters_init.value())
+                        agglo.fit(pixels)
+                        new_img = [[agglo.predict_center(list(pixel)) for pixel in row] for row in img]
+                        new_img = np.array(new_img, np.uint8)
+                        self.display_image(self.item_seg_output, new_img)
 
                     case 1:  # Mean Shift
 

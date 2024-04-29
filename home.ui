@@ -264,6 +264,47 @@ QTabBar::tab:selected {
 }
 QPlotWidget{
  background-color:(25, 35, 45, 0.8)
+}
+/*----------------------------------------------------------------------------------------*/
+QComboBox{
+ border:1px solid #176B87;
+border-radius:5px;
+background-color: #176B87;
+padding: 2px 10px;
+color:white;
+}
+
+
+
+QComboBox:on { /* shift the text when the popup opens */
+    padding-top: 3px;
+    padding-left: 4px;
+}
+
+
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 22px;
+
+    border-left-width: 1px;
+    border-left-color: darkgray;
+    border-left-style: solid; /* just a single line */
+    border-top-right-radius: 3px; /* same radius as the QComboBox */
+    border-bottom-right-radius: 3px;
+}
+
+QComboBox::down-arrow {
+    image: url(icons/caret-down copy.svg);
+}
+
+QComboBox::down-arrow:on { /* shift the arrow when popup is open */
+    top: 1px;
+    left: 1px;
+}
+QComboBox QAbstractItemView {
+border:none;
+    selection-background-color:#176B87;
 }</string>
   </property>
   <widget class="QWidget" name="centralwidget">
@@ -306,8 +347,26 @@ QPlotWidget{
             </item>
             <item>
              <widget class="QComboBox" name="comboBox_seg">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>199</width>
+                <height>16777215</height>
+               </size>
+              </property>
               <property name="styleSheet">
-               <string notr="true">background: #132f5c;</string>
+               <string notr="true"/>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>30</width>
+                <height>30</height>
+               </size>
               </property>
               <item>
                <property name="text">
@@ -332,16 +391,6 @@ QPlotWidget{
              </widget>
             </item>
            </layout>
-          </item>
-          <item>
-           <widget class="QCheckBox" name="checkBox_LUV">
-            <property name="styleSheet">
-             <string notr="true">font-size:16px;</string>
-            </property>
-            <property name="text">
-             <string>LUV</string>
-            </property>
-           </widget>
           </item>
           <item>
            <widget class="QStackedWidget" name="stackedWidget_seg">
@@ -371,40 +420,98 @@ QPlotWidget{
               <item row="0" column="0">
                <widget class="QGroupBox" name="groupBox">
                 <property name="title">
-                 <string>Agglo. Settings</string>
+                 <string>                            Agglomerative Settings</string>
                 </property>
                 <property name="flat">
                  <bool>true</bool>
                 </property>
-                <layout class="QGridLayout" name="gridLayout_9">
-                 <property name="topMargin">
-                  <number>25</number>
-                 </property>
-                 <item row="0" column="0">
+                <layout class="QHBoxLayout" name="horizontalLayout_3">
+                 <item>
                   <layout class="QHBoxLayout" name="horizontalLayout_6">
+                   <property name="spacing">
+                    <number>22</number>
+                   </property>
                    <item>
                     <widget class="QLabel" name="label_6">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="minimumSize">
+                      <size>
+                       <width>0</width>
+                       <height>14</height>
+                      </size>
+                     </property>
                      <property name="text">
-                      <string>Cluster Size:</string>
+                      <string>Clustesr number = </string>
                      </property>
                     </widget>
                    </item>
                    <item>
-                    <widget class="QSpinBox" name="spinBox_cluster_size"/>
+                    <widget class="QSpinBox" name="spinBox_clusters_num">
+                     <property name="font">
+                      <font>
+                       <family>Ubuntu</family>
+                       <pointsize>-1</pointsize>
+                       <weight>75</weight>
+                       <bold>true</bold>
+                      </font>
+                     </property>
+                     <property name="cursor">
+                      <cursorShape>PointingHandCursor</cursorShape>
+                     </property>
+                     <property name="buttonSymbols">
+                      <enum>QAbstractSpinBox::PlusMinus</enum>
+                     </property>
+                     <property name="value">
+                      <number>5</number>
+                     </property>
+                     <property name="displayIntegerBase">
+                      <number>10</number>
+                     </property>
+                    </widget>
                    </item>
                   </layout>
                  </item>
-                 <item row="1" column="0">
+                 <item>
                   <layout class="QHBoxLayout" name="horizontalLayout_9">
+                   <property name="spacing">
+                    <number>22</number>
+                   </property>
                    <item>
                     <widget class="QLabel" name="label_9">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
                      <property name="text">
-                      <string>Init Cluster:</string>
+                      <string>Initial Clusters =</string>
                      </property>
                     </widget>
                    </item>
                    <item>
-                    <widget class="QSpinBox" name="spinBox_cluster_init"/>
+                    <widget class="QSpinBox" name="spinBox_clusters_init">
+                     <property name="buttonSymbols">
+                      <enum>QAbstractSpinBox::PlusMinus</enum>
+                     </property>
+                     <property name="suffix">
+                      <string/>
+                     </property>
+                     <property name="prefix">
+                      <string/>
+                     </property>
+                     <property name="value">
+                      <number>15</number>
+                     </property>
+                     <property name="displayIntegerBase">
+                      <number>10</number>
+                     </property>
+                    </widget>
                    </item>
                   </layout>
                  </item>
@@ -658,7 +765,7 @@ QPlotWidget{
           <item>
            <widget class="QPushButton" name="btn_seg_apply">
             <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+             <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
               <horstretch>0</horstretch>
               <verstretch>1</verstretch>
              </sizepolicy>
@@ -666,7 +773,7 @@ QPlotWidget{
             <property name="minimumSize">
              <size>
               <width>100</width>
-              <height>0</height>
+              <height>36</height>
              </size>
             </property>
             <property name="text">
@@ -1100,7 +1207,7 @@ QPlotWidget{
      <x>0</x>
      <y>0</y>
      <width>1207</width>
-     <height>29</height>
+     <height>30</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
