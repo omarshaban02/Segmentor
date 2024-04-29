@@ -6,7 +6,7 @@ from home import Ui_MainWindow
 import pyqtgraph as pg
 import cv2
 from PyQt5.uic import loadUiType
-from classes import RegionGrowingThread, MeanShiftThread, Thresholding
+from classes import RegionGrowingThread, MeanShiftThread, Thresholding, KMeansClustering
 
 ui, _ = loadUiType("home.ui")
 
@@ -31,6 +31,8 @@ class Application(QMainWindow, ui):
         # Thread for Mean Shift
         self.mean_shift_thread = None
 
+        self.kmeans = None
+
         self.wgt_seg_input.addItem(self.scatter_item)
 
         self.actionOpen_Image.triggered.connect(self.open_image)
@@ -51,6 +53,7 @@ class Application(QMainWindow, ui):
         ############################################ Connections ###################################################
         self.wgt_seg_input.scene().sigMouseClicked.connect(self.sld_region_threshold_click)
         self.comboBox_seg.currentIndexChanged.connect(self.clear_points)
+        
 
         #############################################################################################################
         self.undo_shortcut = QApplication.instance().installEventFilter(self)
@@ -137,8 +140,9 @@ class Application(QMainWindow, ui):
 
                     case 2:  # K-Means
 
-                        # INSERT AGGLOMERATIVE CODE HERE
-                        pass
+                        self.kmeans = KMeansClustering(self.sld_seg_ksize.value(), self.sld_seg_max_iterations.value())
+                        self.display_image(self.item_seg_output, self.kmeans.apply_to_image(self.loaded_image))
+                        print("K-means is applied")
 
                     case 3:  # Region Growing
 

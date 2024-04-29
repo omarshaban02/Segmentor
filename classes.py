@@ -212,13 +212,14 @@ def mean_shift(image, bandwidth=21, max_iterations=50, convergence_threshold=1e-
 
     return colored_segmentation
 
+
 # ######################################## Mean Shift Algorithm end ######################################
+
+
 ########################################## Thresholding ##################################################
 class Thresholding:
     def __init__(self, input_image):
         self.img = input_image.copy()
-
-    
 
     def global_threshold(self, threshold_value=127, max_value=255):
         """
@@ -255,13 +256,12 @@ class Thresholding:
             for j in range(image.shape[1]):
                 # Define the region of interest
                 roi = image[max(0, i - blockSize // 2): min(image.shape[0], i + blockSize // 2),
-                            max(0, j - blockSize // 2): min(image.shape[1], j + blockSize // 2)]
+                      max(0, j - blockSize // 2): min(image.shape[1], j + blockSize // 2)]
                 # Compute the threshold value for the region
                 threshold_value = np.mean(roi) - C
                 # Apply thresholding
                 thresholded[i, j] = max_value if image[i, j] > threshold_value else 0
         return thresholded
-        
 
     def _compute_otsu_criteria(self, im, th):
         # create the thresholded image
@@ -291,7 +291,7 @@ class Thresholding:
 
     def otsuThresholding(self):
         img = self.img
-        threshold_range = range(np.max(img)+1)
+        threshold_range = range(np.max(img) + 1)
         criterias = np.array([self._compute_otsu_criteria(img, th) for th in threshold_range])
 
         # best threshold is the one minimizing the Otsu criteria
@@ -302,37 +302,162 @@ class Thresholding:
         binary[binary >= best_threshold] = 255
 
         return binary
-    
+
     def optimal_thresholding(self):
         # Convert image to grayscale
         gray_image = self.img
-        
+
         # Initialize threshold with a random value (e.g., midpoint of intensity range)
         min_intensity = np.min(gray_image)
         max_intensity = np.max(gray_image)
         threshold = (min_intensity + max_intensity) // 2
-        
+
         # Iterate until convergence (threshold value stabilizes)
         while True:
             # Classify pixels into foreground (class 1) and background (class 2) based on current threshold
             foreground_pixels = gray_image[gray_image > threshold]
             background_pixels = gray_image[gray_image <= threshold]
-            
+
             # Calculate mean intensity values of the two classes
             mean_foreground = np.mean(foreground_pixels)
             mean_background = np.mean(background_pixels)
-            
+
             # Calculate new threshold as the average of mean intensities
             new_threshold = (mean_foreground + mean_background) / 2
-            
+
             # Check convergence: if new threshold is close to the old threshold, break the loop
             if np.abs(new_threshold - threshold) < 1e-3:
                 break
-            
+
             # Update the threshold
             threshold = new_threshold
-        
+
         # Apply the final threshold to the grayscale image
         thresholded_image = (gray_image > threshold).astype(np.uint8) * 255
-        
+
         return thresholded_image
+
+
+# ######################################### Thresholding ends ##################################################
+
+# ######################################### LUV mapping ##################################################
+
+def luv_mapping(img):
+    b, g, r = img[:, :, 0], img[:, :, 1], img[:, :, 2]
+
+    shape = r.shape
+
+    b = (b / 255).flatten()
+    g = (g / 255).flatten()
+    r = (r / 255).flatten()
+
+    def gamma_correction(value):
+        value = np.asarray(value)
+        condition = value <= 0.04045
+        res = np.where(
+            condition,
+            value / 12.92,
+            ((value + 0.055) / 1.055) ** 2.4
+        )
+        return res
+
+    r = gamma_correction(r)
+    g = gamma_correction(g)
+    b = gamma_correction(b)
+    rgb = np.array([r, g, b])
+
+    converting_mat = [[0.412453, 0.357580, 0.180423],
+                      [0.212671, 0.715160, 0.072169],
+                      [0.019334, 0.119193, 0.950227]]
+
+    x, y, z = np.matmul(converting_mat, rgb)
+
+    # Calculate the chromaticity coordinates
+    u_dash = 4 * x / (x + 15 * y + 3 * z)
+    v_dash = 9 * y / (x + 15 * y + 3 * z)
+
+    un = 0.19793943
+    vn = 0.46831096
+
+    # Calculate L
+    y_gt_idx = np.argwhere(y > 0.008856)
+    y_le_idx = np.argwhere(y <= 0.008856)
+
+    l = np.zeros_like(y)
+    l[y_gt_idx] = (116 * y[y_gt_idx] ** (1 / 3)) - 16
+    l[y_le_idx] = 903.3 * y[y_le_idx]
+
+    # Calculate u and v
+    u = 13 * l * (u_dash - un)
+    v = 13 * l * (v_dash - vn)
+
+    # Conversion to 8-bit
+    l = 255 / 100 * l
+    u = 225 / 354 * (u + 134)
+    v = 255 / 262 * (v + 140)
+
+    # Reshape after flattening
+    l = l.reshape(shape)
+    u = u.reshape(shape)
+    v = v.reshape(shape)
+
+    luv = np.array([l, u, v], np.int64).T
+    luv = np.fliplr(np.rot90(luv, 3))
+    return luv
+
+
+# ######################################### LUV mapping ends ##################################################
+
+# ######################################### K means ##################################################
+class KMeansClustering:
+    def __init__(self, K, max_iterations=100, tolerance=1e-4):
+        self.K = K
+        self.max_iterations = max_iterations
+        self.tolerance = tolerance
+        self.centroids = None
+
+    def initialize_centroids(self, data):
+        # Randomly choose K unique centroids from the data
+        self.centroids = data[np.random.choice(data.shape[0], self.K, replace=False)]
+
+    def calculate_distances(self, data):
+        # Compute the Euclidean distances efficiently
+        return np.linalg.norm(data[:, np.newaxis] - self.centroids, axis=2)
+
+    def run_kmeans_iterations(self, data):
+        # Initialize centroids
+        self.initialize_centroids(data)
+
+        # Main loop for K-means iterations
+        for iteration in range(self.max_iterations):
+            # Calculate distances and assign clusters
+            distances = self.calculate_distances(data)
+            cluster_indices = np.argmin(distances, axis=1)
+
+            # Update centroids based on mean of points in each cluster
+            new_centroids = np.array(
+                [data[cluster_indices == k].mean(axis=0) for k in range(self.K)]
+            )
+
+            # Check for convergence
+            if np.allclose(new_centroids, self.centroids, rtol=self.tolerance):
+                break  # Convergence achieved
+
+            self.centroids = new_centroids  # Update centroids for the next iteration
+
+        return cluster_indices, self.centroids
+
+    def apply_to_image(self, image):
+        # Flatten image to 2D array (height*width, 3) for RGB
+        pixel_data = image.reshape(-1, 3).astype(float)
+
+        # Run K-means clustering
+        cluster_indices, centroids = self.run_kmeans_iterations(pixel_data)
+
+        # Create segmented image with the centroids' colors
+        segmented_image_data = centroids[cluster_indices].astype(int)
+
+        # Reshape segmented data to original image dimensions
+        segmented_image = segmented_image_data.reshape(image.shape)
+
+        return segmented_image
