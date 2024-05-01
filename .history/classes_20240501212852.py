@@ -438,7 +438,7 @@ class Thresholding:
     
     
     
-    def local_multilevel_otsu_thresholding(self, num_classes = 3, patch_size = 100):
+    def local_multilevel_otsu_thresholding(self, num_classes, patch_size):
         """Segments the image using multilevel otsu thresholding in local patches
 
         Args:
@@ -454,7 +454,6 @@ class Thresholding:
         # Get image dimensions
         height = image.shape[0]
         width = image.shape[1]
-        
         
         
         # Initialize segmented image

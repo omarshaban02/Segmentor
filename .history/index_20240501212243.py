@@ -55,8 +55,6 @@ class Application(QMainWindow, Ui_MainWindow):
         self.comboBox_seg.currentIndexChanged.connect(self.clear_points)
         self.comboBox_thresh.currentIndexChanged.connect(self._thresholding_setting_visibility)
         self.checkBox_thresh_local.stateChanged.connect(self._thresholding_setting_visibility)
-        # self.spinBox_thesh_multi_patch_size.valueChanged.connect(self.process_image)
-
         
 
         #############################################################################################################
@@ -169,8 +167,7 @@ class Application(QMainWindow, Ui_MainWindow):
             case 1:  # Thresholding Tab
                 current_thresh_mode = self.comboBox_thresh.currentIndex()
                 self.thresh_obj = Thresholding(self.loaded_image_gray)
-                multotsu_num_classes = self.spinBox_thesh_multi_num_classes.value()
-                multotsu_patch_size = self.spinBox_thesh_multi_patch_size.value()
+                multotsu_num_classes = self.slider
                 
 
                 match (self.checkBox_thresh_global.isChecked(), self.checkBox_thresh_local.isChecked()):
@@ -185,8 +182,7 @@ class Application(QMainWindow, Ui_MainWindow):
                                 self.display_image(self.item_thresh_output, result)
                                 pass
                             case 2:  # Multilevel Thresholding
-                                result = self.thresh_obj.multilevel_otsu_thresholding(self.thresh_obj.img,multotsu_num_classes)
-                                self.display_image(self.item_thresh_output, result)
+                                result = self.thresh_obj.multilevel_otsu_thresholding(self.)
                                 pass
 
                     case (False, True):  # Local thresholding
@@ -202,8 +198,7 @@ class Application(QMainWindow, Ui_MainWindow):
                                 pass
 
                             case 2:  # Multilevel Thresholding
-                                result = self.thresh_obj.local_multilevel_otsu_thresholding(multotsu_num_classes, multotsu_patch_size)
-                                self.display_image(self.item_thresh_output, result)
+                                # INSERT THRESHOLDING CODE HERE
                                 pass
 
                     
@@ -234,7 +229,6 @@ class Application(QMainWindow, Ui_MainWindow):
         if file_dialog.exec_() == QFileDialog.Accepted:
             selected_file = file_dialog.selectedFiles()[0]
             self.load_img_file(selected_file)
-            self._adjust_patch_size_min_value()
 
     def setup_plotwidgets(self):
         for plotwidget in self.findChildren(pg.PlotWidget):
@@ -256,9 +250,6 @@ class Application(QMainWindow, Ui_MainWindow):
             self.wgt_thresh_patch_size.setVisible(False)
         else:
             self.wgt_thresh_patch_size.setVisible(True)
-            
-    def _adjust_patch_size_min_value(self):
-        self.spinBox_thesh_multi_patch_size.setMaximum(min(self.loaded_image_gray.shape))
 
     def init_application(self):
         self.setup_plotwidgets()

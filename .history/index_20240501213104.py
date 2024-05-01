@@ -55,8 +55,6 @@ class Application(QMainWindow, Ui_MainWindow):
         self.comboBox_seg.currentIndexChanged.connect(self.clear_points)
         self.comboBox_thresh.currentIndexChanged.connect(self._thresholding_setting_visibility)
         self.checkBox_thresh_local.stateChanged.connect(self._thresholding_setting_visibility)
-        # self.spinBox_thesh_multi_patch_size.valueChanged.connect(self.process_image)
-
         
 
         #############################################################################################################
@@ -170,7 +168,7 @@ class Application(QMainWindow, Ui_MainWindow):
                 current_thresh_mode = self.comboBox_thresh.currentIndex()
                 self.thresh_obj = Thresholding(self.loaded_image_gray)
                 multotsu_num_classes = self.spinBox_thesh_multi_num_classes.value()
-                multotsu_patch_size = self.spinBox_thesh_multi_patch_size.value()
+                multotsu_patch_size = self.spinBox_thesh_multi_patch_size.value() / 100
                 
 
                 match (self.checkBox_thresh_global.isChecked(), self.checkBox_thresh_local.isChecked()):
@@ -234,7 +232,6 @@ class Application(QMainWindow, Ui_MainWindow):
         if file_dialog.exec_() == QFileDialog.Accepted:
             selected_file = file_dialog.selectedFiles()[0]
             self.load_img_file(selected_file)
-            self._adjust_patch_size_min_value()
 
     def setup_plotwidgets(self):
         for plotwidget in self.findChildren(pg.PlotWidget):
@@ -256,9 +253,6 @@ class Application(QMainWindow, Ui_MainWindow):
             self.wgt_thresh_patch_size.setVisible(False)
         else:
             self.wgt_thresh_patch_size.setVisible(True)
-            
-    def _adjust_patch_size_min_value(self):
-        self.spinBox_thesh_multi_patch_size.setMaximum(min(self.loaded_image_gray.shape))
 
     def init_application(self):
         self.setup_plotwidgets()

@@ -438,13 +438,13 @@ class Thresholding:
     
     
     
-    def local_multilevel_otsu_thresholding(self, num_classes = 3, patch_size = 100):
+    def local_multilevel_otsu_thresholding(self, num_classes, relative_patch_size):
         """Segments the image using multilevel otsu thresholding in local patches
 
         Args:
             image (np.ndarray): input image (accepts grayscale only)  
             num_classes (int): number of classes to segment the image into 
-            patch_size (int): pixel size of the patches used to divide the image
+            relative_patch_size (float): patch size relative to the image, used to divide the image
 
         Returns:
             np.ndarray: the segmented image.
@@ -454,6 +454,8 @@ class Thresholding:
         # Get image dimensions
         height = image.shape[0]
         width = image.shape[1]
+        
+        patch_size = min(height, width) // relative_patch_size
         
         
         

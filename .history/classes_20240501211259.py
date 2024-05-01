@@ -437,54 +437,10 @@ class Thresholding:
         return block_thresholded
     
     
-    
-    def local_multilevel_otsu_thresholding(self, num_classes = 3, patch_size = 100):
-        """Segments the image using multilevel otsu thresholding in local patches
-
-        Args:
-            image (np.ndarray): input image (accepts grayscale only)  
-            num_classes (int): number of classes to segment the image into 
-            patch_size (int): pixel size of the patches used to divide the image
-
-        Returns:
-            np.ndarray: the segmented image.
-        """
-        image = self.img
-
-        # Get image dimensions
-        height = image.shape[0]
-        width = image.shape[1]
-        
-        
-        
-        # Initialize segmented image
-        segmented_image = np.zeros_like(image)
-        
-        # Iterate over image patches
-        for y in range(0, height, patch_size):
-            for x in range(0, width, patch_size):
-                # Get the current patch
-                patch = image[y:y+patch_size, x:x+patch_size]
-                
-                # Apply multilevel otsu thresholding to the patch
-                patch_segmented = self.multilevel_otsu_thresholding(patch, num_classes)
-                
-                # Assign segmented patch to the corresponding region in the segmented image
-                segmented_image[y:y+patch_size, x:x+patch_size] = patch_segmented
-        
-        return segmented_image
-
-    
     def multilevel_otsu_thresholding(self, image, num_classes):
-        """Calculates Multi-Otsu Thresholds and returns the segmented image
-
-        Args:
-            image (np.ndarray): the input image. accepts greyscale only
-            num_classes (int): number of classes to be segmented
-
-        Returns:
-            np.ndarray: the segmented image.
-        """               
+        # Convert the image to grayscale
+        # gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        
         
         # Calculate histogram
         hist = cv2.calcHist([image], [0], None, [256], [0,256])
@@ -519,6 +475,32 @@ class Thresholding:
         segmented_image = np.digitize(image, thresholds)
         
         return segmented_image
+
+def local_multilevel_otsu_thresholding(self, image, num_classes, patch_size):
+    # Convert the image to grayscale
+    gray_image = image
+    
+    # Get image dimensions
+    height = gray_image.shape[0]
+    width = gray_image.shape[1]
+    # print(gray_image.shape)
+    
+    # Initialize segmented image
+    segmented_image = np.zeros_like(gray_image)
+    
+    # Iterate over image patches
+    for y in range(0, height, patch_size):
+        for x in range(0, width, patch_size):
+            # Get the current patch
+            patch = gray_image[y:y+patch_size, x:x+patch_size]
+            
+            # Apply multilevel otsu thresholding to the patch
+            patch_segmented, _ = multilevel_otsu_thresholding(patch, num_classes)
+            
+            # Assign segmented patch to the corresponding region in the segmented image
+            segmented_image[y:y+patch_size, x:x+patch_size] = patch_segmented
+    
+    return segmented_image
 
 
 # ######################################### Thresholding ends ##################################################

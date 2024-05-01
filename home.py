@@ -512,6 +512,10 @@ class Ui_MainWindow(object):
         self.sld_region_threshold.setOrientation(QtCore.Qt.Horizontal)
         self.sld_region_threshold.setObjectName("sld_region_threshold")
         self.horizontalLayout.addWidget(self.sld_region_threshold)
+        self.label_5 = QtWidgets.QLabel(self.groupBox_3)
+        self.label_5.setMinimumSize(QtCore.QSize(65, 0))
+        self.label_5.setObjectName("label_5")
+        self.horizontalLayout.addWidget(self.label_5)
         self.gridLayout_6.addLayout(self.horizontalLayout, 0, 0, 1, 1)
         self.gridLayout_5.addWidget(self.groupBox_3, 0, 0, 1, 1)
         self.stackedWidget_seg.addWidget(self.page_region_grow)
@@ -622,8 +626,9 @@ class Ui_MainWindow(object):
         self.horizontalLayout_5.addWidget(self.label_4)
         self.spinBox_thesh_multi_patch_size = QtWidgets.QSpinBox(self.wgt_thresh_patch_size)
         self.spinBox_thesh_multi_patch_size.setStyleSheet("font-size:15px;")
-        self.spinBox_thesh_multi_patch_size.setMinimum(50)
-        self.spinBox_thesh_multi_patch_size.setMaximum(200)
+        self.spinBox_thesh_multi_patch_size.setMinimum(0)
+        self.spinBox_thesh_multi_patch_size.setMaximum(500)
+        self.spinBox_thesh_multi_patch_size.setProperty("value", 25)
         self.spinBox_thesh_multi_patch_size.setObjectName("spinBox_thesh_multi_patch_size")
         self.horizontalLayout_5.addWidget(self.spinBox_thesh_multi_patch_size)
         self.verticalLayout.addWidget(self.wgt_thresh_patch_size)
@@ -676,13 +681,14 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuFile.menuAction())
 
         self.retranslateUi(MainWindow)
-        self.tabWidget.setCurrentIndex(1)
+        self.tabWidget.setCurrentIndex(0)
         self.stackedWidget_seg.setCurrentIndex(0)
-        self.stackedWidget.setCurrentIndex(0)
+        self.stackedWidget.setCurrentIndex(1)
         self.sld_seg_ksize.valueChanged['int'].connect(self.label_12.setNum) # type: ignore
         self.sld_seg_max_iterations.valueChanged['int'].connect(self.label_13.setNum) # type: ignore
         self.comboBox_seg.currentIndexChanged['int'].connect(self.stackedWidget_seg.setCurrentIndex) # type: ignore
         self.comboBox_thresh.currentIndexChanged['int'].connect(self.stackedWidget.setCurrentIndex) # type: ignore
+        self.sld_region_threshold.valueChanged['int'].connect(self.label_5.setNum) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -706,6 +712,7 @@ class Ui_MainWindow(object):
         self.label_13.setText(_translate("MainWindow", "50"))
         self.groupBox_3.setTitle(_translate("MainWindow", "Region Grow Settings"))
         self.label.setText(_translate("MainWindow", "Region Threshold"))
+        self.label_5.setText(_translate("MainWindow", "6"))
         self.btn_seg_apply.setText(_translate("MainWindow", "Apply"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_seg), _translate("MainWindow", "Segmentation"))
         self.label_14.setText(_translate("MainWindow", "Thresholding Method"))
