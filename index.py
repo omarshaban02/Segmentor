@@ -165,47 +165,39 @@ class Application(QMainWindow, ui):
                 current_thresh_mode = self.comboBox_thresh.currentIndex()
                 self.thresh_obj = Thresholding(self.loaded_image_gray)
 
-                match current_thresh_mode:
-                    case 0:  # Global Thresholding
-        
-                        """
-                        Callback function for global thresholding.
-                        """
-                        result = self.thresh_obj.global_threshold(self.sld_thresh_global.value())
-                        self.display_image(self.item_thresh_output, result)
-                        pass
+                match (self.checkBox_thresh_global.isChecked(), self.checkBox_thresh_local.isChecked()):
+                    case (True, False):  # Global thresholding
+                        match current_thresh_mode:
+                            case 0:  # Optimal Thresholding
+                                result = self.thresh_obj.optimal_thresholding()
+                                self.display_image(self.item_thresh_output, result)
+                                pass      
+                            case 1:  # Otsu Thresholding
+                                result = self.thresh_obj.otsuThresholding()
+                                self.display_image(self.item_thresh_output, result)
+                                pass
+                            case 2:  # Multilevel Thresholding
+                                # INSERT THRESHOLDING CODE HERE
+                                pass
 
-                    case 1:  # Local Thresholding
+                    case (False, True):  # Local thresholding
+                        match current_thresh_mode:
+                            case 0:  # Optimal Thresholding
+                                result = self.thresh_obj.local_optimal_thresholding()
+                                self.display_image(self.item_thresh_output, result)
+                                pass
+
+                            case 1:  # Otsu Thresholding
+                                result = self.thresh_obj.local_otsu_thresholding()
+                                self.display_image(self.item_thresh_output, result)
+                                pass
+
+                            case 2:  # Multilevel Thresholding
+                                # INSERT THRESHOLDING CODE HERE
+                                pass
+
+                    
                         
-                        """
-                        Callback function for local thresholding.
-                        """
-                        result = self.thresh_obj.local_threshold((self.sld_thresh_local_block_size.value() ))
-                        self.display_image(self.item_thresh_output, result)
-                        pass
-
-                    case 2:  # Optimal Thresholding
-                        """
-                        Callback function for local thresholding.
-                        """
-                        result = self.thresh_obj.optimal_thresholding()
-                        self.display_image(self.item_thresh_output, result)
-                        pass
-                        
-
-                    case 3:  # Otsu Thresholding
-                        """
-                        Callback function for local thresholding.
-                        """
-                        result = self.thresh_obj.otsuThresholding()
-                        self.display_image(self.item_thresh_output, result)
-                        pass
-                        
-                        pass
-
-                    case 4:  # Multilevel Thresholding
-                        # INSERT THRESHOLDING CODE HERE
-                        pass
 
     # ############################### Misc Functions ################################
 

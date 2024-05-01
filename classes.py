@@ -263,7 +263,7 @@ class Thresholding:
                 thresholded[i, j] = max_value if image[i, j] > threshold_value else 0
         return thresholded
 
-    def _compute_otsu_criteria(self, im, th):
+    def compute_otsu_criteria(self, im, th):
         # create the thresholded image
         thresholded_im = np.zeros(im.shape)
         thresholded_im[im >= th] = 1
@@ -292,7 +292,7 @@ class Thresholding:
     def otsuThresholding(self):
         img = self.img
         threshold_range = range(np.max(img) + 1)
-        criterias = np.array([self._compute_otsu_criteria(img, th) for th in threshold_range])
+        criterias = np.array([self.compute_otsu_criteria(img, th) for th in threshold_range])
 
         # best threshold is the one minimizing the Otsu criteria
         best_threshold = threshold_range[np.argmin(criterias)]
@@ -302,6 +302,42 @@ class Thresholding:
         binary[binary >= best_threshold] = 255
 
         return binary
+    
+    def local_otsu_thresholding(self, block_size = 5, sigma = 1) :
+        gray_image = self.img
+
+        
+        # Apply Gaussian smoothing to the grayscale image
+        blurred_image = cv2.GaussianBlur(gray_image, (0, 0), sigmaX=sigma, sigmaY=sigma)
+        
+        # Get image dimensions
+        height, width = gray_image.shape
+        
+        # Initialize the output binary image
+        binary_image = np.zeros_like(gray_image)
+        
+        # Loop over the image with specified block size
+        for y in range(0, height, block_size):
+            for x in range(0, width, block_size):
+                # Define the current block within the smoothed image
+                block = blurred_image[y:y+block_size, x:x+block_size]
+                
+                # Calculate the Otsu threshold for the current block
+                threshold_range = range(np.min(block), np.max(block) + 1)
+                criterias = np.array([self.compute_otsu_criteria(block, th) for th in threshold_range])
+                best_threshold = threshold_range[np.argmin(criterias)]
+                
+                # Apply threshold to the current block and assign to the output image
+                binary_block = np.zeros_like(block)
+                binary_block[block >= best_threshold] = 255
+                
+                # Calculate block bounds for assignment
+                block_height, block_width = binary_block.shape
+                end_y = min(y + block_size, height)
+                end_x = min(x + block_size, width)
+                binary_image[y:end_y, x:end_x] = binary_block[:end_y-y, :end_x-x]
+        
+        return binary_image
 
     def optimal_thresholding(self):
         # Convert image to grayscale
@@ -336,6 +372,69 @@ class Thresholding:
         thresholded_image = (gray_image > threshold).astype(np.uint8) * 255
 
         return thresholded_image
+
+
+    def local_optimal_thresholding(self, block_size = 5):
+        # Convert image to grayscale
+        gray_image = self.img
+        
+        # Get image dimensions
+        height, width = gray_image.shape
+        
+        # Initialize the output binary image
+        binary_image = np.zeros_like(gray_image, dtype=np.uint8)
+        
+        # Iterate over the image in blocks of specified size
+        for y in range(0, height, block_size):
+            for x in range(0, width, block_size):
+                # Define the current block within the image
+                block = gray_image[y:y+block_size, x:x+block_size]
+                
+                # Apply optimal thresholding to the current block
+                block_thresholded = self.apply_optimal_thresholding(block)
+                
+                # Assign the thresholded block to the corresponding region in the binary image
+                block_height, block_width = block_thresholded.shape
+                binary_image[y:y+block_height, x:x+block_width] = block_thresholded
+        
+        return binary_image
+
+    def apply_optimal_thresholding(self, block):
+        # Check if block is empty (all pixels are the same)
+        if np.all(block == block[0, 0]):
+            return np.zeros_like(block, dtype=np.uint8)  # Return all zeros for empty block
+        
+        # Compute the threshold using mean intensity of the block
+        threshold = np.mean(block)
+        
+        # Iterate until convergence (threshold value stabilizes)
+        while True:
+            # Classify pixels into foreground (class 1) and background (class 2) based on current threshold
+            foreground_pixels = block[block > threshold]
+            background_pixels = block[block <= threshold]
+            
+            # Check if any class is empty
+            if len(foreground_pixels) == 0 or len(background_pixels) == 0:
+                return np.zeros_like(block, dtype=np.uint8)  # Return all zeros if any class is empty
+            
+            # Calculate mean intensity values of the two classes
+            mean_foreground = np.mean(foreground_pixels)
+            mean_background = np.mean(background_pixels)
+            
+            # Calculate new threshold as the average of mean intensities
+            new_threshold = (mean_foreground + mean_background) / 2.0
+            
+            # Check convergence: if new threshold is close to the old threshold, break the loop
+            if np.abs(new_threshold - threshold) < 1e-3:
+                break
+            
+            # Update the threshold
+            threshold = new_threshold
+        
+        # Apply the final threshold to the block
+        block_thresholded = (block > threshold).astype(np.uint8) * 255
+        
+        return block_thresholded
 
 
 # ######################################### Thresholding ends ##################################################
