@@ -870,7 +870,7 @@ border:none;
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_15">
             <item>
-             <widget class="QCheckBox" name="checkBox">
+             <widget class="QCheckBox" name="checkBox_thresh_global">
               <property name="styleSheet">
                <string notr="true">font-size:15px;</string>
               </property>
@@ -886,7 +886,7 @@ border:none;
              </widget>
             </item>
             <item>
-             <widget class="QCheckBox" name="checkBox_2">
+             <widget class="QCheckBox" name="checkBox_thresh_local">
               <property name="styleSheet">
                <string notr="true">font-size:15px;</string>
               </property>
