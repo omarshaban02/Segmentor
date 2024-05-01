@@ -6,12 +6,13 @@ from home import Ui_MainWindow
 import pyqtgraph as pg
 import cv2
 from PyQt5.uic import loadUiType
-from classes import RegionGrowingThread, MeanShiftThread, Thresholding, KMeansClustering, AgglomerativeClustering
+from classes import (RegionGrowingThread, MeanShiftThread, Thresholding, KMeansClustering, AgglomerativeClustering,
+                     luv_mapping)
 
 ui, _ = loadUiType("home.ui")
 
 
-class Application(QMainWindow, Ui_MainWindow):
+class Application(QMainWindow, ui):
     def __init__(self):
         super(QMainWindow, self).__init__()
         self.setupUi(self)
@@ -21,6 +22,7 @@ class Application(QMainWindow, Ui_MainWindow):
         # Loaded image and its grayscale version
         self.loaded_image = None
         self.loaded_image_gray = None
+        self.loaded_image_luv = None
 
         # List to store the initial region seeds
         self.initial_region_seeds = []
@@ -41,28 +43,25 @@ class Application(QMainWindow, Ui_MainWindow):
         self.plotwidget_set = [self.wgt_seg_input, self.wgt_seg_output, self.wgt_thresh_input, self.wgt_thresh_output]
 
         # Create an image item for each plot-widget
-        self.image_item_set = [self.item_seg_input, self.item_seg_output, self.item_thresh_input
-            , self.item_thresh_output] = [pg.ImageItem() for _ in range(4)]
+        self.image_item_set = [self.item_seg_input, self.item_seg_output, self.item_thresh_input,
+                               self.item_thresh_output] = [pg.ImageItem() for _ in range(4)]
 
         # Initializes application components
         self.init_application()
 
         self.btn_seg_apply.clicked.connect(self.process_image)
         self.btn_thresh_apply.clicked.connect(self.process_image)
- 
+
         ############################################ Connections ###################################################
         self.wgt_seg_input.scene().sigMouseClicked.connect(self.sld_region_threshold_click)
         self.comboBox_seg.currentIndexChanged.connect(self.clear_points)
         self.comboBox_thresh.currentIndexChanged.connect(self._thresholding_setting_visibility)
         self.checkBox_thresh_local.stateChanged.connect(self._thresholding_setting_visibility)
         # self.spinBox_thesh_multi_patch_size.valueChanged.connect(self.process_image)
-
-        
+        self.luv_checkBox.stateChanged.connect(self.apply_luv)
 
         #############################################################################################################
         self.undo_shortcut = QApplication.instance().installEventFilter(self)
-
-
 
     ################################## Initial Region Seed Handling Section #########################################
     # Event filter to handle pressing Ctrl + Z to undo initial contour
@@ -171,7 +170,6 @@ class Application(QMainWindow, Ui_MainWindow):
                 self.thresh_obj = Thresholding(self.loaded_image_gray)
                 multotsu_num_classes = self.spinBox_thesh_multi_num_classes.value()
                 multotsu_patch_size = self.spinBox_thesh_multi_patch_size.value()
-                
 
                 match (self.checkBox_thresh_global.isChecked(), self.checkBox_thresh_local.isChecked()):
                     case (True, False):  # Global thresholding
@@ -179,13 +177,14 @@ class Application(QMainWindow, Ui_MainWindow):
                             case 0:  # Optimal Thresholding
                                 result = self.thresh_obj.optimal_thresholding()
                                 self.display_image(self.item_thresh_output, result)
-                                pass      
+                                pass
                             case 1:  # Otsu Thresholding
                                 result = self.thresh_obj.otsuThresholding()
                                 self.display_image(self.item_thresh_output, result)
                                 pass
                             case 2:  # Multilevel Thresholding
-                                result = self.thresh_obj.multilevel_otsu_thresholding(self.thresh_obj.img,multotsu_num_classes)
+                                result = self.thresh_obj.multilevel_otsu_thresholding(self.thresh_obj.img,
+                                                                                      multotsu_num_classes)
                                 self.display_image(self.item_thresh_output, result)
                                 pass
 
@@ -202,12 +201,10 @@ class Application(QMainWindow, Ui_MainWindow):
                                 pass
 
                             case 2:  # Multilevel Thresholding
-                                result = self.thresh_obj.local_multilevel_otsu_thresholding(multotsu_num_classes, multotsu_patch_size)
+                                result = self.thresh_obj.local_multilevel_otsu_thresholding(multotsu_num_classes,
+                                                                                            multotsu_patch_size)
                                 self.display_image(self.item_thresh_output, result)
                                 pass
-
-                    
-                        
 
     # ############################### Misc Functions ################################
 
@@ -219,12 +216,20 @@ class Application(QMainWindow, Ui_MainWindow):
 
     def load_img_file(self, image_path):
         # Loads the image using imread, converts it to RGB, then rotates it 90 degrees clockwise
-        self.loaded_image = cv2.rotate(cv2.cvtColor(cv2.imread(image_path), cv2.COLOR_BGR2RGB), cv2.ROTATE_90_CLOCKWISE)
+        self.loaded_image = cv2.rotate(cv2.cvtColor(cv2.imread(image_path), cv2.COLOR_BGR2RGB),
+                                            cv2.ROTATE_90_CLOCKWISE)
         self.loaded_image_gray = cv2.cvtColor(self.loaded_image, cv2.COLOR_RGB2GRAY)
 
+        self.loaded_image_luv = luv_mapping(self.loaded_image)
+
+        if self.luv_checkBox.isChecked():
+            self.display_image(self.item_seg_input, self.loaded_image_luv)
+
+        else:
+            self.display_image(self.item_seg_input, self.loaded_image)
+
         # Displays the image on both tabs in the input widget
-        for item in (self.item_seg_input, self.item_thresh_input):
-            self.display_image(item, self.loaded_image)
+        self.display_image(self.item_thresh_input, self.loaded_image)
 
     def open_image(self):
         file_dialog = QFileDialog(self)
@@ -250,18 +255,25 @@ class Application(QMainWindow, Ui_MainWindow):
         # Adds the image items to their corresponding plot widgets, so they can be used later to display images
         for plotwidget, imgItem in zip(self.plotwidget_set, self.image_item_set):
             plotwidget.addItem(imgItem)
-            
+
     def _thresholding_setting_visibility(self):
         if self.checkBox_thresh_global.isChecked():
             self.wgt_thresh_patch_size.setVisible(False)
         else:
             self.wgt_thresh_patch_size.setVisible(True)
-            
+
     def _adjust_patch_size_min_value(self):
         self.spinBox_thesh_multi_patch_size.setMaximum(min(self.loaded_image_gray.shape))
 
     def init_application(self):
         self.setup_plotwidgets()
+
+    def apply_luv(self):
+        if self.luv_checkBox.isChecked():
+            self.display_image(self.item_seg_input, self.loaded_image_luv)
+
+        else:
+            self.display_image(self.item_seg_input, self.loaded_image)
 
 
 app = QApplication(sys.argv)

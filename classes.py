@@ -302,41 +302,40 @@ class Thresholding:
         binary[binary >= best_threshold] = 255
 
         return binary
-    
-    def local_otsu_thresholding(self, block_size = 5, sigma = 1) :
+
+    def local_otsu_thresholding(self, block_size=5, sigma=1):
         gray_image = self.img
 
-        
         # Apply Gaussian smoothing to the grayscale image
         blurred_image = cv2.GaussianBlur(gray_image, (0, 0), sigmaX=sigma, sigmaY=sigma)
-        
+
         # Get image dimensions
         height, width = gray_image.shape
-        
+
         # Initialize the output binary image
         binary_image = np.zeros_like(gray_image)
-        
+
         # Loop over the image with specified block size
         for y in range(0, height, block_size):
             for x in range(0, width, block_size):
                 # Define the current block within the smoothed image
-                block = blurred_image[y:y+block_size, x:x+block_size]
-                
+                block = blurred_image[y:y + block_size, x:x + block_size]
+
                 # Calculate the Otsu threshold for the current block
                 threshold_range = range(np.min(block), np.max(block) + 1)
                 criterias = np.array([self.compute_otsu_criteria(block, th) for th in threshold_range])
                 best_threshold = threshold_range[np.argmin(criterias)]
-                
+
                 # Apply threshold to the current block and assign to the output image
                 binary_block = np.zeros_like(block)
                 binary_block[block >= best_threshold] = 255
-                
+
                 # Calculate block bounds for assignment
                 block_height, block_width = binary_block.shape
                 end_y = min(y + block_size, height)
                 end_x = min(x + block_size, width)
-                binary_image[y:end_y, x:end_x] = binary_block[:end_y-y, :end_x-x]
-        
+                binary_image[y:end_y, x:end_x] = binary_block[:end_y - y, :end_x - x]
+
         return binary_image
 
     def optimal_thresholding(self):
@@ -373,72 +372,69 @@ class Thresholding:
 
         return thresholded_image
 
-
-    def local_optimal_thresholding(self, block_size = 5):
+    def local_optimal_thresholding(self, block_size=5):
         # Convert image to grayscale
         gray_image = self.img
-        
+
         # Get image dimensions
         height, width = gray_image.shape
-        
+
         # Initialize the output binary image
         binary_image = np.zeros_like(gray_image, dtype=np.uint8)
-        
+
         # Iterate over the image in blocks of specified size
         for y in range(0, height, block_size):
             for x in range(0, width, block_size):
                 # Define the current block within the image
-                block = gray_image[y:y+block_size, x:x+block_size]
-                
+                block = gray_image[y:y + block_size, x:x + block_size]
+
                 # Apply optimal thresholding to the current block
                 block_thresholded = self.apply_optimal_thresholding(block)
-                
+
                 # Assign the thresholded block to the corresponding region in the binary image
                 block_height, block_width = block_thresholded.shape
-                binary_image[y:y+block_height, x:x+block_width] = block_thresholded
-        
+                binary_image[y:y + block_height, x:x + block_width] = block_thresholded
+
         return binary_image
 
     def apply_optimal_thresholding(self, block):
         # Check if block is empty (all pixels are the same)
         if np.all(block == block[0, 0]):
             return np.zeros_like(block, dtype=np.uint8)  # Return all zeros for empty block
-        
+
         # Compute the threshold using mean intensity of the block
         threshold = np.mean(block)
-        
+
         # Iterate until convergence (threshold value stabilizes)
         while True:
             # Classify pixels into foreground (class 1) and background (class 2) based on current threshold
             foreground_pixels = block[block > threshold]
             background_pixels = block[block <= threshold]
-            
+
             # Check if any class is empty
             if len(foreground_pixels) == 0 or len(background_pixels) == 0:
                 return np.zeros_like(block, dtype=np.uint8)  # Return all zeros if any class is empty
-            
+
             # Calculate mean intensity values of the two classes
             mean_foreground = np.mean(foreground_pixels)
             mean_background = np.mean(background_pixels)
-            
+
             # Calculate new threshold as the average of mean intensities
             new_threshold = (mean_foreground + mean_background) / 2.0
-            
+
             # Check convergence: if new threshold is close to the old threshold, break the loop
             if np.abs(new_threshold - threshold) < 1e-3:
                 break
-            
+
             # Update the threshold
             threshold = new_threshold
-        
+
         # Apply the final threshold to the block
         block_thresholded = (block > threshold).astype(np.uint8) * 255
-        
+
         return block_thresholded
-    
-    
-    
-    def local_multilevel_otsu_thresholding(self, num_classes = 3, patch_size = 100):
+
+    def local_multilevel_otsu_thresholding(self, num_classes=3, patch_size=100):
         """Segments the image using multilevel otsu thresholding in local patches
 
         Args:
@@ -454,27 +450,24 @@ class Thresholding:
         # Get image dimensions
         height = image.shape[0]
         width = image.shape[1]
-        
-        
-        
+
         # Initialize segmented image
         segmented_image = np.zeros_like(image)
-        
+
         # Iterate over image patches
         for y in range(0, height, patch_size):
             for x in range(0, width, patch_size):
                 # Get the current patch
-                patch = image[y:y+patch_size, x:x+patch_size]
-                
+                patch = image[y:y + patch_size, x:x + patch_size]
+
                 # Apply multilevel otsu thresholding to the patch
                 patch_segmented = self.multilevel_otsu_thresholding(patch, num_classes)
-                
+
                 # Assign segmented patch to the corresponding region in the segmented image
-                segmented_image[y:y+patch_size, x:x+patch_size] = patch_segmented
-        
+                segmented_image[y:y + patch_size, x:x + patch_size] = patch_segmented
+
         return segmented_image
 
-    
     def multilevel_otsu_thresholding(self, image, num_classes):
         """Calculates Multi-Otsu Thresholds and returns the segmented image
 
@@ -484,40 +477,40 @@ class Thresholding:
 
         Returns:
             np.ndarray: the segmented image.
-        """               
-        
+        """
+
         # Calculate histogram
-        hist = cv2.calcHist([image], [0], None, [256], [0,256])
+        hist = cv2.calcHist([image], [0], None, [256], [0, 256])
         hist_norm = hist.ravel() / hist.sum()
-        
+
         # Compute cumulative sum of probabilities
         cumsum = np.cumsum(hist_norm)
-        
+
         # Compute Otsu threshold for each class
         thresholds = np.zeros(num_classes - 1)
         for i in range(num_classes - 1):
             max_var, best_thresh = 0, 0
-            for t in range(i * 256 // num_classes, (i+1) * 256 // num_classes):
+            for t in range(i * 256 // num_classes, (i + 1) * 256 // num_classes):
                 # Class probabilities
                 w0 = cumsum[t] if t > 0 else 0
                 w1 = cumsum[-1] - w0
-                
+
                 # Class means
-                mu0 = np.sum(np.arange(0, t+1) * hist_norm[:t+1]) / (w0 + 1e-5)
-                mu1 = np.sum(np.arange(t+1, 256) * hist_norm[t+1:]) / (w1 + 1e-5)
-                
+                mu0 = np.sum(np.arange(0, t + 1) * hist_norm[:t + 1]) / (w0 + 1e-5)
+                mu1 = np.sum(np.arange(t + 1, 256) * hist_norm[t + 1:]) / (w1 + 1e-5)
+
                 # Class variances
                 var = w0 * w1 * ((mu0 - mu1) ** 2)
-                
+
                 if var > max_var:
                     max_var = var
                     best_thresh = t
             thresholds[i] = best_thresh
-        
+
         # Apply thresholding
         thresholds = np.sort(np.concatenate(([0], thresholds, [255])))
         segmented_image = np.digitize(image, thresholds)
-        
+
         return segmented_image
 
 
@@ -644,6 +637,7 @@ class KMeansClustering:
         segmented_image = segmented_image_data.reshape(image.shape)
 
         return segmented_image
+
 
 # ######################################### K_means end ##################################################
 

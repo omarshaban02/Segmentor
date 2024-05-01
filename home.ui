@@ -393,6 +393,13 @@ border:none;
            </layout>
           </item>
           <item>
+           <widget class="QCheckBox" name="luv_checkBox">
+            <property name="text">
+             <string>LUV</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QStackedWidget" name="stackedWidget_seg">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
@@ -456,7 +463,6 @@ border:none;
                       <font>
                        <family>Ubuntu</family>
                        <pointsize>-1</pointsize>
-                       <weight>75</weight>
                        <bold>true</bold>
                       </font>
                      </property>
@@ -534,49 +540,6 @@ border:none;
               <property name="bottomMargin">
                <number>0</number>
               </property>
-              <item row="0" column="0">
-               <widget class="QGroupBox" name="groupBox_2">
-                <property name="title">
-                 <string>Mean Shift Settings</string>
-                </property>
-                <property name="flat">
-                 <bool>true</bool>
-                </property>
-                <layout class="QGridLayout" name="gridLayout_8">
-                 <property name="topMargin">
-                  <number>25</number>
-                 </property>
-                 <item row="0" column="0">
-                  <layout class="QHBoxLayout" name="horizontalLayout_10">
-                   <item>
-                    <widget class="QLabel" name="label_10">
-                     <property name="text">
-                      <string>Cluster Size:</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QSpinBox" name="spinBox_cluster_size_2"/>
-                   </item>
-                  </layout>
-                 </item>
-                 <item row="1" column="0">
-                  <layout class="QHBoxLayout" name="horizontalLayout_11">
-                   <item>
-                    <widget class="QLabel" name="label_11">
-                     <property name="text">
-                      <string>Init Cluster:</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QSpinBox" name="spinBox_cluster_init_2"/>
-                   </item>
-                  </layout>
-                 </item>
-                </layout>
-               </widget>
-              </item>
              </layout>
             </widget>
             <widget class="QWidget" name="page_kmeans">
@@ -1117,7 +1080,7 @@ border:none;
      <x>0</x>
      <y>0</y>
      <width>1207</width>
-     <height>30</height>
+     <height>29</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
