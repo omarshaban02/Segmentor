@@ -324,7 +324,7 @@ border:none;
     <item row="0" column="0">
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tab_seg">
        <attribute name="title">
@@ -401,7 +401,7 @@ border:none;
              </sizepolicy>
             </property>
             <property name="currentIndex">
-             <number>0</number>
+             <number>1</number>
             </property>
             <widget class="QWidget" name="page_agglo">
              <layout class="QGridLayout" name="gridLayout_2">
@@ -446,7 +446,7 @@ border:none;
                       </size>
                      </property>
                      <property name="text">
-                      <string>Clustesr number = </string>
+                      <string>Clusters number = </string>
                      </property>
                     </widget>
                    </item>
@@ -831,12 +831,9 @@ border:none;
        <attribute name="title">
         <string>Thresholding</string>
        </attribute>
-       <layout class="QGridLayout" name="gridLayout_16" rowstretch="0,1">
+       <layout class="QGridLayout" name="gridLayout_9" rowstretch="0,1">
         <item row="0" column="0">
-         <layout class="QHBoxLayout" name="horizontalLayout_15">
-          <property name="spacing">
-           <number>25</number>
-          </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_17">
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_16">
             <item>
@@ -851,16 +848,6 @@ border:none;
               <property name="styleSheet">
                <string notr="true">background: #132f5c;</string>
               </property>
-              <item>
-               <property name="text">
-                <string>Global</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Local</string>
-               </property>
-              </item>
               <item>
                <property name="text">
                 <string>Optimal</string>
@@ -881,243 +868,37 @@ border:none;
            </layout>
           </item>
           <item>
-           <spacer name="horizontalSpacer">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>60</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item>
-           <widget class="QStackedWidget" name="stackedWidget_seg_2">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
-              <horstretch>1</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="currentIndex">
-             <number>1</number>
-            </property>
-            <widget class="QWidget" name="page_agglo_2">
-             <layout class="QGridLayout" name="gridLayout_7">
-              <property name="leftMargin">
-               <number>0</number>
+           <layout class="QHBoxLayout" name="horizontalLayout_15">
+            <item>
+             <widget class="QCheckBox" name="checkBox">
+              <property name="styleSheet">
+               <string notr="true">font-size:15px;</string>
               </property>
-              <property name="topMargin">
-               <number>0</number>
+              <property name="text">
+               <string>Global</string>
               </property>
-              <property name="rightMargin">
-               <number>0</number>
+              <property name="checked">
+               <bool>true</bool>
               </property>
-              <property name="bottomMargin">
-               <number>0</number>
+              <attribute name="buttonGroup">
+               <string notr="true">buttonGroup</string>
+              </attribute>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="checkBox_2">
+              <property name="styleSheet">
+               <string notr="true">font-size:15px;</string>
               </property>
-              <item row="0" column="0">
-               <widget class="QGroupBox" name="groupBox_5">
-                <property name="title">
-                 <string>Global Threshold Settings</string>
-                </property>
-                <property name="flat">
-                 <bool>true</bool>
-                </property>
-                <layout class="QFormLayout" name="formLayout_3">
-                 <property name="topMargin">
-                  <number>25</number>
-                 </property>
-                 <item row="0" column="0">
-                  <widget class="QLabel" name="label_3">
-                   <property name="styleSheet">
-                    <string notr="true">font-size:15px;</string>
-                   </property>
-                   <property name="text">
-                    <string>Threshold</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="0" column="1">
-                  <layout class="QHBoxLayout" name="horizontalLayout_5">
-                   <item>
-                    <widget class="QSlider" name="sld_thresh_global">
-                     <property name="minimum">
-                      <number>0</number>
-                     </property>
-                     <property name="maximum">
-                      <number>100</number>
-                     </property>
-                     <property name="value">
-                      <number>20</number>
-                     </property>
-                     <property name="orientation">
-                      <enum>Qt::Horizontal</enum>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QLabel" name="label_24">
-                     <property name="minimumSize">
-                      <size>
-                       <width>25</width>
-                       <height>0</height>
-                      </size>
-                     </property>
-                     <property name="maximumSize">
-                      <size>
-                       <width>16777215</width>
-                       <height>16777215</height>
-                      </size>
-                     </property>
-                     <property name="styleSheet">
-                      <string notr="true">font-size:15px;</string>
-                     </property>
-                     <property name="text">
-                      <string>20</string>
-                     </property>
-                    </widget>
-                   </item>
-                  </layout>
-                 </item>
-                </layout>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-            <widget class="QWidget" name="page_mean_shift_2">
-             <layout class="QGridLayout" name="gridLayout_12">
-              <property name="leftMargin">
-               <number>0</number>
+              <property name="text">
+               <string>Local</string>
               </property>
-              <property name="topMargin">
-               <number>0</number>
-              </property>
-              <property name="rightMargin">
-               <number>0</number>
-              </property>
-              <property name="bottomMargin">
-               <number>0</number>
-              </property>
-              <item row="0" column="0">
-               <widget class="QGroupBox" name="groupBox_6">
-                <property name="title">
-                 <string>Local Threshold Settings</string>
-                </property>
-                <property name="flat">
-                 <bool>true</bool>
-                </property>
-                <layout class="QGridLayout" name="gridLayout_13">
-                 <property name="topMargin">
-                  <number>25</number>
-                 </property>
-                 <item row="0" column="1">
-                  <layout class="QHBoxLayout" name="horizontalLayout_4">
-                   <property name="sizeConstraint">
-                    <enum>QLayout::SetMinimumSize</enum>
-                   </property>
-                   <item>
-                    <widget class="QSlider" name="sld_thresh_local_block_size">
-                     <property name="minimum">
-                      <number>3</number>
-                     </property>
-                     <property name="maximum">
-                      <number>20</number>
-                     </property>
-                     <property name="singleStep">
-                      <number>1</number>
-                     </property>
-                     <property name="pageStep">
-                      <number>3</number>
-                     </property>
-                     <property name="value">
-                      <number>3</number>
-                     </property>
-                     <property name="orientation">
-                      <enum>Qt::Horizontal</enum>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QLabel" name="label_26">
-                     <property name="minimumSize">
-                      <size>
-                       <width>25</width>
-                       <height>0</height>
-                      </size>
-                     </property>
-                     <property name="maximumSize">
-                      <size>
-                       <width>16777215</width>
-                       <height>16777215</height>
-                      </size>
-                     </property>
-                     <property name="styleSheet">
-                      <string notr="true">font-size:15px;</string>
-                     </property>
-                     <property name="text">
-                      <string>3</string>
-                     </property>
-                    </widget>
-                   </item>
-                  </layout>
-                 </item>
-                 <item row="0" column="0">
-                  <widget class="QLabel" name="label_5">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
-                   <property name="styleSheet">
-                    <string notr="true">font-size:15px;</string>
-                   </property>
-                   <property name="text">
-                    <string>Block Size</string>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-            <widget class="QWidget" name="page_kmeans_2">
-             <layout class="QGridLayout" name="gridLayout_14">
-              <property name="leftMargin">
-               <number>0</number>
-              </property>
-              <property name="topMargin">
-               <number>0</number>
-              </property>
-              <property name="rightMargin">
-               <number>0</number>
-              </property>
-              <property name="bottomMargin">
-               <number>0</number>
-              </property>
-             </layout>
-            </widget>
-            <widget class="QWidget" name="page_region_grow_2">
-             <layout class="QGridLayout" name="gridLayout_15">
-              <property name="leftMargin">
-               <number>0</number>
-              </property>
-              <property name="topMargin">
-               <number>0</number>
-              </property>
-              <property name="rightMargin">
-               <number>0</number>
-              </property>
-              <property name="bottomMargin">
-               <number>0</number>
-              </property>
-             </layout>
-            </widget>
-           </widget>
+              <attribute name="buttonGroup">
+               <string notr="true">buttonGroup</string>
+              </attribute>
+             </widget>
+            </item>
+           </layout>
           </item>
           <item>
            <spacer name="horizontalSpacer_2">
@@ -1126,7 +907,7 @@ border:none;
             </property>
             <property name="sizeHint" stdset="0">
              <size>
-              <width>60</width>
+              <width>50</width>
               <height>20</height>
              </size>
             </property>
@@ -1150,6 +931,19 @@ border:none;
              <string>Apply</string>
             </property>
            </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_3">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>50</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
           </item>
          </layout>
         </item>
@@ -1286,53 +1080,8 @@ border:none;
     </hint>
    </hints>
   </connection>
-  <connection>
-   <sender>sld_thresh_global</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>label_24</receiver>
-   <slot>setNum(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>943</x>
-     <y>128</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>974</x>
-     <y>128</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>comboBox_thresh</sender>
-   <signal>currentIndexChanged(int)</signal>
-   <receiver>stackedWidget_seg_2</receiver>
-   <slot>setCurrentIndex(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>346</x>
-     <y>122</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>984</x>
-     <y>138</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>sld_thresh_local_block_size</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>label_26</receiver>
-   <slot>setNum(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>863</x>
-     <y>116</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>952</x>
-     <y>119</y>
-    </hint>
-   </hints>
-  </connection>
  </connections>
+ <buttongroups>
+  <buttongroup name="buttonGroup"/>
+ </buttongroups>
 </ui>
