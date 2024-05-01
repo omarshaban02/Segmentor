@@ -324,7 +324,7 @@ border:none;
     <item row="0" column="0">
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tab_seg">
        <attribute name="title">
@@ -831,7 +831,7 @@ border:none;
        <attribute name="title">
         <string>Thresholding</string>
        </attribute>
-       <layout class="QGridLayout" name="gridLayout_9" rowstretch="0,1">
+       <layout class="QGridLayout" name="gridLayout_11" rowstretch="0,1">
         <item row="0" column="0">
          <layout class="QHBoxLayout" name="horizontalLayout_17">
           <item>
@@ -914,6 +914,119 @@ border:none;
            </spacer>
           </item>
           <item>
+           <widget class="QStackedWidget" name="stackedWidget">
+            <property name="currentIndex">
+             <number>0</number>
+            </property>
+            <widget class="QWidget" name="page">
+             <layout class="QGridLayout" name="gridLayout_7">
+              <property name="leftMargin">
+               <number>10</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <property name="bottomMargin">
+               <number>0</number>
+              </property>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="page_2"/>
+            <widget class="QWidget" name="page_multi">
+             <layout class="QGridLayout" name="gridLayout_9">
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <property name="bottomMargin">
+               <number>0</number>
+              </property>
+              <item row="0" column="0">
+               <layout class="QVBoxLayout" name="verticalLayout">
+                <item>
+                 <layout class="QHBoxLayout" name="horizontalLayout_4">
+                  <item>
+                   <widget class="QLabel" name="label_3">
+                    <property name="styleSheet">
+                     <string notr="true">font-size:15px;</string>
+                    </property>
+                    <property name="text">
+                     <string>#Classes</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QSpinBox" name="spinBox_thesh_multi_num_classes">
+                    <property name="styleSheet">
+                     <string notr="true">font-size:15px;</string>
+                    </property>
+                    <property name="minimum">
+                     <number>3</number>
+                    </property>
+                    <property name="maximum">
+                     <number>20</number>
+                    </property>
+                    <property name="value">
+                     <number>3</number>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+                <item>
+                 <widget class="QWidget" name="wgt_thresh_patch_size" native="true">
+                  <layout class="QHBoxLayout" name="horizontalLayout_5">
+                   <item>
+                    <widget class="QLabel" name="label_4">
+                     <property name="styleSheet">
+                      <string notr="true">font-size:15px;</string>
+                     </property>
+                     <property name="text">
+                      <string>Patch_Size</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QSpinBox" name="spinBox_thesh_multi_patch_size">
+                     <property name="styleSheet">
+                      <string notr="true">font-size:15px;</string>
+                     </property>
+                     <property name="minimum">
+                      <number>50</number>
+                     </property>
+                     <property name="maximum">
+                      <number>200</number>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_3">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>50</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
            <widget class="QPushButton" name="btn_thresh_apply">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
@@ -931,19 +1044,6 @@ border:none;
              <string>Apply</string>
             </property>
            </widget>
-          </item>
-          <item>
-           <spacer name="horizontalSpacer_3">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>50</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
           </item>
          </layout>
         </item>
@@ -1039,12 +1139,12 @@ border:none;
    <slot>setNum(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>555</x>
-     <y>104</y>
+     <x>998</x>
+     <y>131</y>
     </hint>
     <hint type="destinationlabel">
-     <x>611</x>
-     <y>104</y>
+     <x>1055</x>
+     <y>132</y>
     </hint>
    </hints>
   </connection>
@@ -1055,12 +1155,12 @@ border:none;
    <slot>setNum(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>555</x>
-     <y>108</y>
+     <x>998</x>
+     <y>164</y>
     </hint>
     <hint type="destinationlabel">
-     <x>611</x>
-     <y>108</y>
+     <x>1055</x>
+     <y>165</y>
     </hint>
    </hints>
   </connection>
@@ -1077,6 +1177,22 @@ border:none;
     <hint type="destinationlabel">
      <x>1060</x>
      <y>90</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>comboBox_thresh</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>stackedWidget</receiver>
+   <slot>setCurrentIndex(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>352</x>
+     <y>111</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>544</x>
+     <y>113</y>
     </hint>
    </hints>
   </connection>

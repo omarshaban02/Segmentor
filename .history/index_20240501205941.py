@@ -62,7 +62,7 @@ class Application(QMainWindow, Ui_MainWindow):
 
 
 
-    ################################## Initial Region Seed Handling Section #########################################
+    ################################## Initial Contour Handling Section #########################################
     # Event filter to handle pressing Ctrl + Z to undo initial contour
     def eventFilter(self, source, event):
         """
@@ -118,7 +118,7 @@ class Application(QMainWindow, Ui_MainWindow):
         # Clear scatter plot
         self.scatter_item.clear()
 
-    ################################## END Initial Region Seed Handling Section #########################################
+    ################################## END Initial Contour Handling Section #########################################
 
     def update_output(self, segmented_image):
         self.display_image(self.item_seg_output, segmented_image)
