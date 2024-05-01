@@ -132,14 +132,15 @@ class Application(QMainWindow, ui):
                     case 0:  # Agglomerative
                         img = self.loaded_image.copy()
                         pixels = img.reshape((-1, 3))
-                        print(pixels.shape)
 
                         n_clusters = self.spinBox_clusters_num.value()
                         agglo = AgglomerativeClustering(k=n_clusters, initial_k=self.spinBox_clusters_init.value())
+                        print("Start Agglomerative Clustering")
                         agglo.fit(pixels)
-                        new_img = [[agglo.predict_center(list(pixel)) for pixel in row] for row in img]
-                        new_img = np.array(new_img, np.uint8)
-                        self.display_image(self.item_seg_output, new_img)
+                        new_image = [[agglo.predict_center(list(pixel)) for pixel in row] for row in img]
+                        new_image = np.array(new_image, np.uint8)
+                        print("End Agglomerative Clustering")
+                        self.display_image(self.item_seg_output, new_image)
 
                     case 1:  # Mean Shift
 

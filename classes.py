@@ -507,7 +507,7 @@ def luv_mapping(img):
 
 # ######################################### LUV mapping ends ##################################################
 
-# ######################################### K means ##################################################
+# ######################################### K_means start ##################################################
 class KMeansClustering:
     def __init__(self, K, max_iterations=100, tolerance=1e-4):
         self.K = K
@@ -561,13 +561,16 @@ class KMeansClustering:
 
         return segmented_image
 
+# ######################################### K_means end ##################################################
+
+# ######################################### agglomerative start ##################################################
 
 def euclidean_distance(point1, point2):
     return np.linalg.norm(np.array(point1) - np.array(point2))
 
 
-def clusters_distance(cluster1, cluster2):
-    return max([euclidean_distance(point1, point2) for point1 in cluster1 for point2 in cluster2])
+# def clusters_distance(cluster1, cluster2):
+#     return max([euclidean_distance(point1, point2) for point1 in cluster1 for point2 in cluster2])
 
 
 def clusters_distance_2(cluster1, cluster2):
@@ -583,17 +586,15 @@ class AgglomerativeClustering:
         self.initial_k = initial_k
 
     def initial_clusters(self, points):
-        groups = {}
+        initial_groups = {}
         d = int(256 / (self.initial_k))
         for i in range(self.initial_k):
             j = i * d
-            groups[(j, j, j)] = []
+            initial_groups[(j, j, j)] = []
         for i, p in enumerate(points):
-            if i % 100000 == 0:
-                print('processing pixel:', i)
-            go = min(groups.keys(), key=lambda c: euclidean_distance(p, c))
-            groups[go].append(p)
-        return [g for g in groups.values() if len(g) > 0]
+            go = min(initial_groups.keys(), key=lambda c: euclidean_distance(p, c))
+            initial_groups[go].append(p)
+        return [g for g in initial_groups.values() if len(g) > 0]
 
     def fit(self, points):
 
@@ -612,10 +613,12 @@ class AgglomerativeClustering:
             # Merge the two clusters
             merged_cluster = cluster1 + cluster2
 
-            # Add the merged cluster to the clusters list
             self.clusters_list.append(merged_cluster)
 
+        # final cluster dictionary
         self.cluster = {}
+
+        # Iterate over pixels in each cluster and give it the number of it is cluster
         for cl_num, cl in enumerate(self.clusters_list):
             for point in cl:
                 self.cluster[tuple(point)] = cl_num
@@ -625,11 +628,12 @@ class AgglomerativeClustering:
             self.centers[cl_num] = np.average(cl, axis=0)
 
     def predict_cluster(self, point):
-        # assuming point belongs to clusters that were computed by fit functions
         return self.cluster[tuple(point)]
 
+    # take the pixel and return the new value of this pixel, first we know what it is cluster number and return
+    # the average of this cluster as the new value of this pixel
     def predict_center(self, point):
-
-        point_cluster_num = self.predict_cluster(point)
-        center = self.centers[point_cluster_num]
+        point_cluster_number = self.predict_cluster(point)
+        center = self.centers[point_cluster_number]
         return center
+# ######################################### agglomerative end ##################################################
