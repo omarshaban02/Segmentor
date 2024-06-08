@@ -6,11 +6,17 @@
         <language minSize="227" name="Python" />
       </Languages>
     </inspection_tool>
+    <inspection_tool class="PyPep8NamingInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true">
+      <option name="ignoredErrors">
+        <list>
+          <option value="N802" />
+        </list>
+      </option>
+    </inspection_tool>
     <inspection_tool class="PyUnresolvedReferencesInspection" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="ignoredIdentifiers">
         <list>
-          <option value="pyqtgraph.Qt.QtGui.QPixmap" />
-          <option value="pyqtgraph.Qt.QtGui.QIcon" />
+          <option value="image" />
         </list>
       </option>
     </inspection_tool>

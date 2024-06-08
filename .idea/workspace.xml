@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="3edc43d0-a89d-47ee-8518-bf019e5fffef" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/classes/Agglomerative.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/classes/AgglomerativeClustering.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/classes/KMeans.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/classes/LUV.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/classes/MeanShift.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/classes/RegionGrowing.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/classes/Threads.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/classes/Thresholding.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.history/classes_20240501204143.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.history/classes_20240501211035.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.history/classes_20240501211259.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.history/classes_20240501211520.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.history/classes_20240501211816.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.history/classes_20240501211858.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.history/classes_20240501212154.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.history/classes_20240501212715.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.history/classes_20240501212852.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.history/classes_20240501213804.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.history/classes_20240501214058.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.history/classes_20240501215002.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.history/classes_20240501215029.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.history/classes_20240501215125.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.history/index_20240428145758.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.history/index_20240428171619.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.history/index_20240428171701.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.history/index_20240428171928.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.history/index_20240428172005.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.history/index_20240428172115.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.history/index_20240428172151.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.history/index_20240428172319.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.history/index_20240428172747.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.history/index_20240428172829.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.history/index_20240428172915.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.history/index_20240428173302.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.history/index_20240428173925.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.history/index_20240428174029.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.history/index_20240428174403.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.history/index_20240428174421.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.history/index_20240501205941.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.history/index_20240501210206.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.history/index_20240501211955.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.history/index_20240501212243.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.history/index_20240501212547.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.history/index_20240501212741.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.history/index_20240501213104.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.history/index_20240501215014.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.history/index_20240501215046.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.history/index_20240501215235.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.history/index_20240501215558.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.history/index_20240501215825.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.history/index_20240501220300.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.history/index_20240501220336.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.history/main_20240419230612.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.history/main_20240426181326.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.history/main_20240426181820.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.history/main_20240426181847.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.history/main_20240426182044.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.history/main_20240426182227.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.history/main_20240426182240.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.history/main_20240426182340.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.history/main_20240426182728.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/Segmentor.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/classes.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/home.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/home.ui" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/icons/caret-down copy.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/64833.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/CT head.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/MR1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/MR2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/MR3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/SUDOKU.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/TOWER.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/balls.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/car.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/kmeans_cv.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/kmeans_segmented.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/luv_out.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/luv_out_cv.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/sph.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/sphinx.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.py" beforeDir="false" afterPath="$PROJECT_DIR$/index.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/res.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res.qrc" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;Zoz-HF&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/Zoz-HF/Segmentor.git&quot;,
+    &quot;accountId&quot;: &quot;890b55a2-e28f-4b22-8542-16a1759e4ade&quot;
+  }
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 1
+}</component>
+  <component name="ProjectId" id="2fvOCeoF5t0mSUKeQBETfEXORH8" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Python.index.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/Enginering/3rd year/Second term/Computer Vision/Tasks/Task4/Segmentor&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-1d06a55b98c1-91d5c284f522-JavaScript-PY-241.15989.155" />
+        <option value="bundled-python-sdk-babbdf50b680-7c6932dee5e4-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-241.15989.155" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="3edc43d0-a89d-47ee-8518-bf019e5fffef" name="Changes" comment="" />
+      <created>1714677960434</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1714677960434</updated>
+      <workItem from="1714677963747" duration="2783000" />
+      <workItem from="1715289997730" duration="39000" />
+      <workItem from="1717838960884" duration="3734000" />
+      <workItem from="1717842983674" duration="2938000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/Segmentor$index.coverage" NAME="index Coverage Results" MODIFIED="1717847585097" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/index_py$index.coverage" NAME="index Coverage Results" MODIFIED="1717842311843" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+  </component>
+</project>

@@ -1,15 +1,17 @@
 import sys
 import numpy as np
-from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QShortcut, QSlider
+from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog
 from PyQt5.QtCore import Qt
-from home import Ui_MainWindow
 import pyqtgraph as pg
 import cv2
 from PyQt5.uic import loadUiType
-from classes import (RegionGrowingThread, MeanShiftThread, Thresholding, KMeansClustering, AgglomerativeClustering,
-                     luv_mapping)
+from classes.Agglomerative import AgglomerativeClustering
+from classes.KMeans import KMeansClustering
+from classes.LUV import luv_mapping
+from classes.Threads import MeanShiftThread, RegionGrowingThread
+from classes.Thresholding import Thresholding
 
-ui, _ = loadUiType("home.ui")
+ui, _ = loadUiType("mainwindow.ui")
 
 
 class Application(QMainWindow, ui):
@@ -179,7 +181,7 @@ class Application(QMainWindow, ui):
                                 self.display_image(self.item_thresh_output, result)
                                 pass
                             case 1:  # Otsu Thresholding
-                                result = self.thresh_obj.otsuThresholding()
+                                result = self.thresh_obj.otsu_thresholding()
                                 self.display_image(self.item_thresh_output, result)
                                 pass
                             case 2:  # Multilevel Thresholding
@@ -217,7 +219,7 @@ class Application(QMainWindow, ui):
     def load_img_file(self, image_path):
         # Loads the image using imread, converts it to RGB, then rotates it 90 degrees clockwise
         self.loaded_image = cv2.rotate(cv2.cvtColor(cv2.imread(image_path), cv2.COLOR_BGR2RGB),
-                                            cv2.ROTATE_90_CLOCKWISE)
+                                       cv2.ROTATE_90_CLOCKWISE)
         self.loaded_image_gray = cv2.cvtColor(self.loaded_image, cv2.COLOR_RGB2GRAY)
 
         self.loaded_image_luv = luv_mapping(self.loaded_image)
