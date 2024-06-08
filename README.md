@@ -13,10 +13,10 @@ To install the project, clone the repository and install the dependencies:
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/segmentor.git
+git clone https://github.com/Zoz-HF/Segmentor.git
 
 # Navigate to the project directory
-cd segmentor
+cd Segmentor
 ```
 
 ## Usage
